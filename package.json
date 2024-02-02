@@ -1,0 +1,27 @@
+{
+  "name": "pn-js",
+  "version": "1.0.0",
+  "description": "Petri net modeler",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel app/index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bpmn-font": "^0.12.1",
+    "diagram-js": "^13.4.0",
+    "diagram-js-direct-editing": "^2.1.2",
+    "ids": "^1.0.5",
+    "inherits": "^2.0.4",
+    "jquery": "^3.7.1",
+    "min-dash": "^4.2.1",
+    "moddle": "^6.2.3",
+    "moddle-xml": "^10.1.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-less": "^2.11.0",
+    "parcel": "^2.11.0"
+  }
+}
