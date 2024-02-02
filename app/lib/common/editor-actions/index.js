@@ -1,10 +1,10 @@
 import EditorActionsModule from 'diagram-js/lib/features/editor-actions';
 
-import ODEditorActions from './ODEditorActions';
+import EditorActions from './EditorActions';
 
 export default {
   __depends__: [
     EditorActionsModule
   ],
-  editorActions: [ 'type', ODEditorActions ]
+  editorActions: [ 'type', EditorActions ]
 };

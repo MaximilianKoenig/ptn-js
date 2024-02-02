@@ -25,11 +25,9 @@ import OlcPaletteModule from './palette';
 import OlcDrawModule from './draw';
 import OlcRulesModule from './rules';
 import OlcModelingModule from './modeling';
-import OlcButtonBarModule from './buttonbar';
 import OlcAutoPlaceModule from './auto-place';
 
 import OlcModdle from './moddle';
-import OlcEvents from './OlcEvents';
 import { nextPosition, root, is } from '../util/Util';
 
 var emptyDiagram =
@@ -93,7 +91,6 @@ export default function OlcModeler(options) {
     OlcDrawModule,
     OlcRulesModule,
     OlcModelingModule,
-    OlcButtonBarModule,
     OlcAutoPlaceModule,
     {
       moddle: ['value', new OlcModdle({})],
@@ -114,22 +111,8 @@ export default function OlcModeler(options) {
   };
 
   Diagram.call(this, diagramOptions);
-  
-  this.get('eventBus').fire('attach'); // Needed for key listeners to work
 
-  // Hide canvas when no olc is available
-  this.get('eventBus').on(OlcEvents.DEFINITIONS_CHANGED, event => {
-    const container = this.get('canvas').getContainer();
-    const shouldBeVisible = event.definitions.get('olcs').length !== 0;
-    const currentVisibility = container.style.visibility;
-    if (!currentVisibility || (shouldBeVisible !== (currentVisibility !== 'hidden'))) {
-      if (shouldBeVisible) {
-        container.style.visibility = '';
-      } else {
-        container.style.visibility = 'hidden';
-      }
-    }
-  });
+  this.get('eventBus').fire('attach'); // Needed for key listeners to work
 }
 
 inherits(OlcModeler, Diagram);
@@ -146,8 +129,6 @@ OlcModeler.prototype.importXML = function (xml) {
 
     // hook in pre-parse listeners +
     // allow xml manipulation
-    xml = self._emit('import.parse.start', { xml: xml }) || xml;
-
     self.get('moddle').fromXML(xml).then(function (result) {
 
       var definitions = result.rootElement;
@@ -165,23 +146,9 @@ OlcModeler.prototype.importXML = function (xml) {
         self.get('elementFactory')._ids.claim(id, elementsById[id]);
       }
 
-      // hook in post parse listeners +
-      // allow definitions manipulation
-      definitions = self._emit('import.parse.complete', {
-        definitions: definitions,
-        context: context
-      }) || definitions;
       self.importDefinitions(definitions);
-      self._emit('import.done', { error: null, warnings: null });
       resolve();
     }).catch(function (err) {
-
-      self._emit('import.parse.failed', {
-        error: err
-      });
-
-      self._emit('import.done', { error: err, warnings: err.warnings });
-
       return reject(err);
     });
 
@@ -192,10 +159,7 @@ OlcModeler.prototype.importXML = function (xml) {
 OlcModeler.prototype.importDefinitions = function (definitions) {
   this.get('elementFactory')._ids.clear();
   this._definitions = definitions;
-  this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: definitions });
-  this._emit('import.render.start', { definitions: definitions });
   this.showOlc(definitions.olcs[0]);
-  this._emit('import.render.complete', {});
 }
 
 OlcModeler.prototype.showOlc = function (olc) {
@@ -234,8 +198,6 @@ OlcModeler.prototype.showOlc = function (olc) {
       canvas.addConnection(transitionVisual, diagramRoot);
     });
   }
-
-  this._emit(OlcEvents.SELECTED_OLC_CHANGED, { olc: olc });
 }
 
 OlcModeler.prototype.showOlcById = function (id) {
@@ -252,7 +214,6 @@ OlcModeler.prototype.showOlcById = function (id) {
 OlcModeler.prototype.addOlc = function (clazz) {
   var olc = this.get('elementFactory').createBusinessObject('olc:Olc', { name: clazz.name || '<TBD>', classRef: clazz });
   this._definitions.get('olcs').push(olc);
-  this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
   this.showOlc(olc);
 }
 
@@ -270,7 +231,6 @@ OlcModeler.prototype.deleteOlc = function (clazz) {
   var indexAfterRemoval = Math.min(currentIndex, this._definitions.olcs.length - 2);
 
   this._definitions.olcs = without(this._definitions.olcs, olc);
-  this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
 
   if (olc === this._olc) {
     this.showOlc(this._definitions.olcs[indexAfterRemoval]);
@@ -280,7 +240,6 @@ OlcModeler.prototype.deleteOlc = function (clazz) {
 OlcModeler.prototype.renameOlc = function (name, clazz) {
   const olc = this.getOlcByClass(clazz);
   olc.name = name;
-  this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
 }
 
 OlcModeler.prototype.getOlcById = function(id) {
@@ -353,39 +312,14 @@ OlcModeler.prototype.saveXML = function (options) {
       return reject(err);
     }
 
-    // allow to fiddle around with definitions
-    definitions = self._emit('saveXML.start', {
-      definitions: definitions
-    }) || definitions;
-
     self.get('moddle').toXML(definitions, options).then(function (result) {
-
       var xml = result.xml;
-
-      try {
-        xml = self._emit('saveXML.serialized', {
-          error: null,
-          xml: xml
-        }) || xml;
-
-        self._emit('saveXML.done', {
-          error: null,
-          xml: xml
-        });
-      } catch (e) {
-        console.error('error in saveXML life-cycle listener', e);
-      }
-
       return resolve({ xml: xml });
     }).catch(function (err) {
 
       return reject(err);
     });
   });
-};
-
-OlcModeler.prototype._emit = function (type, event) {
-  return this.get('eventBus').fire(type, event);
 };
 
 OlcModeler.prototype.ensureElementIsOnCanvas = function (element) {
