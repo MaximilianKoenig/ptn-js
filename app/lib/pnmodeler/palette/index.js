@@ -8,7 +8,7 @@ import translate from 'diagram-js/lib/i18n/translate';
 import GlobalConnectModule from 'diagram-js/lib/features/global-connect';
 
 import PaletteProvider from './PaletteProvider';
-// import OlcContextPadProvider from './OlcContextPadProvider';
+import PnContextPadProvider from './PnContextPadProvider';
 
 export default {
   __depends__: [
@@ -22,9 +22,9 @@ export default {
     translate
   ],
   __init__: [ 
-    // 'olcContextPadProvider',
+    'pnContextPadProvider',
     'paletteProvider'
   ],
   paletteProvider: [ 'type', PaletteProvider ],
-  // olcContextPadProvider: [ 'type', OlcContextPadProvider ]
+  pnContextPadProvider: [ 'type', PnContextPadProvider ]
 };

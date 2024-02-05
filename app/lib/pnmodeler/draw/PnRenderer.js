@@ -6,6 +6,7 @@ import {
   create as svgCreate,
   classes as svgClasses
 } from 'tiny-svg';
+import { componentsToPath } from 'diagram-js/lib/util/RenderUtil';
 
 
 export default function PnRenderer(eventBus) {
@@ -24,11 +25,24 @@ export default function PnRenderer(eventBus) {
     svgAppend(parentGfx, shape);
     return parentGfx;
   };
+
+  this.drawTransition = function (parentGfx, element) {
+    const shape = svgCreate('path');
+    svgAttr(shape, {
+      d: getTransitionPath(0, 0, element.width, element.height),
+      fill: 'white',
+      fillOpacity: 0.95,
+      stroke: 'black',
+      // strokeWidth: 2
+    });
+    svgAppend(parentGfx, shape);
+    return parentGfx;
+  }
 }
 
 inherits(PnRenderer, BaseRenderer);
 
-ChoreoRenderer.$inject = [
+PnRenderer.$inject = [
   'eventBus'
 ];
 
@@ -50,9 +64,9 @@ PnRenderer.prototype.drawShape = function (parentGfx, element) {
 function getTransitionPath(x, y, width, height) {
   return componentsToPath([
     ['M', x, y],
-    ['H', width],
-    ['V', height],
-    ['H', -width],
+    ['h', width],
+    ['v', height],
+    ['h', -width],
     ['z']
   ]);
 }

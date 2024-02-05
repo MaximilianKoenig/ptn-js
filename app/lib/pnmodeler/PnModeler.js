@@ -22,6 +22,9 @@ import CopyPasteModule from 'diagram-js/lib/features/copy-paste';
 import KeyboardModule from '../common/keyboard';
 
 import PaletteModule from './palette';
+import PnDrawModule from './draw';
+import PnModelingModule from './modeling';
+import PnAutoPlaceModule from './auto-place';
 
 
 
@@ -58,7 +61,9 @@ export default function PnModeler(options) {
     
     const customModules = [
         PaletteModule,
-        // PnDrawModule,
+        PnDrawModule,
+        PnModelingModule,
+        PnAutoPlaceModule,
         // {
         //     moddle: ['value', new PnModdle({})],
         //     pnModeler: ['value', this]
