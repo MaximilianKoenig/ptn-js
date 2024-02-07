@@ -1,3 +1,5 @@
+// TODO: Split into renderUtil and misc util
+
 export function is(element, type) {
     var bo = getBusinessObject(element);
     return bo && (typeof bo.$instanceOf === 'function') && bo.$instanceOf(type);
@@ -32,4 +34,11 @@ export function nextPosition(modeler, type) {
     const y = isFinite(topBorder) ? topBorder : 100;
 
     return {x, y};
+}
+
+export function center(shape) {
+    return {
+      x: shape.x + shape.width / 2,
+      y: shape.y + shape.height / 2
+    };
 }

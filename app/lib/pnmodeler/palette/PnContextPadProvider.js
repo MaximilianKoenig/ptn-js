@@ -26,8 +26,6 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
   const create = this._create;
   const autoPlace = this._autoPlace;
 
-  console.log(autoPlace);
-
   function removeElement() {
     modeling.removeElements([element]);
   }

@@ -25,6 +25,7 @@ import PaletteModule from './palette';
 import PnDrawModule from './draw';
 import PnModelingModule from './modeling';
 import PnAutoPlaceModule from './auto-place';
+import PnRulesModule from './rules';
 
 
 
@@ -64,6 +65,7 @@ export default function PnModeler(options) {
         PnDrawModule,
         PnModelingModule,
         PnAutoPlaceModule,
+        PnRulesModule,
         // {
         //     moddle: ['value', new PnModdle({})],
         //     pnModeler: ['value', this]

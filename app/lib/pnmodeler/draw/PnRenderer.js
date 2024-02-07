@@ -20,7 +20,7 @@ export default function PnRenderer(eventBus) {
       fill: 'white',
       fillOpacity: 0.95,
       stroke: 'black',
-      // strokeWidth: 2
+      strokeWidth: 2
     });
     svgAppend(parentGfx, shape);
     return parentGfx;
@@ -33,10 +33,19 @@ export default function PnRenderer(eventBus) {
       fill: 'white',
       fillOpacity: 0.95,
       stroke: 'black',
-      // strokeWidth: 2
+      strokeWidth: 2
     });
     svgAppend(parentGfx, shape);
     return parentGfx;
+  };
+
+  this.drawArc = function (parentGfx, element) {
+    const arcData = getArcDataFromConnection(element);
+  };
+
+  function getArcDataFromConnection(connection) {
+    console.log(connection);
+    const waypoints = connection.waypoints;
   }
 }
 
@@ -51,10 +60,13 @@ PnRenderer.prototype.canRender = function (element) {
 };
 
 PnRenderer.prototype.drawShape = function (parentGfx, element) {
+  console.log(element);
   if (element.type === 'pn:Place') {
     return this.drawPlace(parentGfx, element);
   } else if (element.type === 'pn:Transition') {
     return this.drawTransition(parentGfx, element);
+  } else if (element.type === 'pn:Arc') {
+    return this.drawArc(parentGfx, element);
   }
 };
 

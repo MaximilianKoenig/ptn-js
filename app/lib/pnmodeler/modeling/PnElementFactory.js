@@ -24,7 +24,6 @@ PnElementFactory.prototype.defaultSizeForType = function (type) {
 
 PnElementFactory.prototype.createShape = function (attrs) {
 	attrs = assign(this.defaultSizeForType(attrs.type), attrs);
-	console.log(attrs);
 	return this.baseCreateShape(attrs);
 }
 
