@@ -13,13 +13,20 @@ import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import MoveModule from 'diagram-js/lib/features/move';
 import OutlineModule from 'diagram-js/lib/features/outline';
 import PaletteModule from 'diagram-js/lib/features/palette';
-// import ResizeModule from 'diagram-js/lib/features/resize';
 import RulesModule from 'diagram-js/lib/features/rules';
 import SelectionModule from 'diagram-js/lib/features/selection';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 import EditorActionsModule from '../common/editor-actions';
 import CopyPasteModule from 'diagram-js/lib/features/copy-paste';
+import GridSnappingModule from 'diagram-js/lib/features/grid-snapping';
+import BendPointsModule from 'diagram-js/lib/features/bendpoints';
 import KeyboardModule from '../common/keyboard';
+
+// Modules to look into:
+// import OverlaysModule from 'diagram-js/lib/features/overlays';
+
+// Modules that might need some custom extensions:
+import ResizeModule from 'diagram-js/lib/features/resize'; // might want to only allow quadratic resizing
 
 import PaletteModule from './palette';
 import PnDrawModule from './draw';
@@ -57,7 +64,10 @@ export default function PnModeler(options) {
         ZoomScrollModule,
         EditorActionsModule,
         KeyboardModule,
-        CopyPasteModule
+        CopyPasteModule,
+        GridSnappingModule,
+        BendPointsModule,
+        ResizeModule
     ];
     
     const customModules = [

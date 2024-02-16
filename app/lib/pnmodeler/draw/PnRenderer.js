@@ -6,23 +6,57 @@ import {
   create as svgCreate,
   classes as svgClasses
 } from 'tiny-svg';
+import {
+  isObject
+} from 'min-dash';
 import { componentsToPath } from 'diagram-js/lib/util/RenderUtil';
 
 
-export default function PnRenderer(eventBus) {
+export default function PnRenderer(eventBus, styles) {
   BaseRenderer.call(this, eventBus, 2000);
+
+  function drawCircle(parentGfx, width, height, offset, attrs) {
+    // Cheeky way to allow for optional parameters ...
+    if (isObject(offset)) {
+      attrs = offset;
+      offset = 0;
+    }
+
+    offset = offset || 0;
+
+    attrs = styles.computeStyle(attrs, {
+      stroke: 'black',
+      strokeWidth: 2,
+      fill: 'white'
+    });
+
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const circle = svgCreate('circle', {
+      cx,
+      cy,
+      r: Math.round((width + height) / 4 - offset),
+      ...attrs
+    });
+
+    svgAppend(parentGfx, circle);
+
+    return circle;
+  }
 
 
   this.drawPlace = function (parentGfx, element) {
-    const shape = svgCreate('path');
-    svgAttr(shape, {
-      d: getPlacePath(0, 0, element.width, element.height),
-      fill: 'white',
-      fillOpacity: 0.95,
-      stroke: 'black',
-      strokeWidth: 2
-    });
-    svgAppend(parentGfx, shape);
+    // const shape = svgCreate('path');
+    // svgAttr(shape, {
+    //   d: getPlacePath(0, 0, element.width, element.height),
+    //   fill: 'white',
+    //   fillOpacity: 0.95,
+    //   stroke: 'black',
+    //   strokeWidth: 2
+    // });
+    // svgAppend(parentGfx, shape);
+    const circle = drawCircle(parentGfx, element.width, element.height, 0, {});
     return parentGfx;
   };
 
@@ -52,7 +86,8 @@ export default function PnRenderer(eventBus) {
 inherits(PnRenderer, BaseRenderer);
 
 PnRenderer.$inject = [
-  'eventBus'
+  'eventBus',
+  'styles'
 ];
 
 PnRenderer.prototype.canRender = function (element) {
