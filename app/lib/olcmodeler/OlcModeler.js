@@ -19,6 +19,7 @@ import SelectionModule from 'diagram-js/lib/features/selection';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 import EditorActionsModule from '../common/editor-actions';
 import CopyPasteModule from 'diagram-js/lib/features/copy-paste';
+import BendPointsModule from 'diagram-js/lib/features/bendpoints';
 import KeyboardModule from '../common/keyboard';
 
 import OlcPaletteModule from './palette';
@@ -82,7 +83,8 @@ export default function OlcModeler(options) {
     ZoomScrollModule,
     EditorActionsModule,
     KeyboardModule,
-    CopyPasteModule
+    CopyPasteModule,
+    BendPointsModule
   ];
 
   // our own modules, contributing controls, customizations, and more
