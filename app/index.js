@@ -28,3 +28,10 @@ async function createNewDiagram() {
 $(function() {
   createNewDiagram();
 });
+
+Array.from(document.getElementsByClassName("canvas")).forEach(element => {
+  element.tabIndex = 0;
+  element.addEventListener('mouseenter', event => {
+    element.focus();
+  });
+});
