@@ -32,7 +32,9 @@ $(function() {
 Array.from(document.getElementsByClassName("canvas")).forEach(element => {
   element.tabIndex = 0;
   element.addEventListener('mouseenter', event => {
-    element.focus();
+    if (document.activeElement.className !== 'djs-direct-editing-content') {
+      element.focus();
+    }
   });
 });
 
