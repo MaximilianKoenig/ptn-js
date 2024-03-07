@@ -35,3 +35,10 @@ Array.from(document.getElementsByClassName("canvas")).forEach(element => {
     element.focus();
   });
 });
+
+// Should be used once the olc modeler is gone
+// const canvas = document.getElementById("pn-canvas")
+// canvas.tabIndex = 0;
+// canvas.addEventListener('mouseenter', event => {
+//   canvas.focus();
+// });
