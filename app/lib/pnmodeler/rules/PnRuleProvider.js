@@ -14,12 +14,12 @@ PnRuleProvider.$inject = [
 
 inherits(PnRuleProvider, RuleProvider);
 
+
+// Todo: Add rule for elements.move and check for overlaps with other shapes
 PnRuleProvider.prototype.init = function () {
   this.addRule('connection.create', function (context) {
-    const {source, target} = context;
-    return ((source.type === 'pn:Place' && target.type === 'pn:Transition')
-      || (source.type === 'pn:Transition' && target.type === 'pn:Place')
-    ) && { type: 'pn:Arc' };
+    const { source, target } = context;
+    return canConnect(source, target);
   });
 
   this.addRule('connection.start', function (context) {
@@ -28,4 +28,23 @@ PnRuleProvider.prototype.init = function () {
       source.type === 'pn:Place' || source.type === 'pn:Transition'
     ) && { type: 'pn:Arc' };
   });
+
+  this.addRule('connection.reconnect', function (context) {
+    const { source, target } = context;
+    return canConnect(source, target);
+  });
+
+  this.addRule('connection.updateWaypoints', function (context) {
+    return {
+      type: context.connection.type
+    };
+  });
+}
+
+PnRuleProvider.prototype.canConnect = canConnect;
+
+function canConnect(source, target) {
+  return ((source.type === 'pn:Place' && target.type === 'pn:Transition')
+    || (source.type === 'pn:Transition' && target.type === 'pn:Place')
+  ) && { type: 'pn:Arc' };
 }
