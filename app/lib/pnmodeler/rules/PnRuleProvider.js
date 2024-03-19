@@ -39,6 +39,13 @@ PnRuleProvider.prototype.init = function () {
       type: context.connection.type
     };
   });
+
+  this.addRule('shape.resize', function (context) {
+    if (context.shape.type === 'pn:Transition') {
+      return true;
+    }
+    return false;
+  });
 }
 
 PnRuleProvider.prototype.canConnect = canConnect;
