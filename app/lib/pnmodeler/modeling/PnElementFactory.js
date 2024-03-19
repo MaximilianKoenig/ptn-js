@@ -1,17 +1,19 @@
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 import inherits from 'inherits';
 import { assign } from 'min-dash';
+import Ids from 'ids';
 
 export default function PnElementFactory(moddle, elementRegistry) {
 	BaseElementFactory.call(this);
-	// this._moddle = moddle;
+	this._moddle = moddle;
 	this._elementRegistry = elementRegistry;
+	this._ids = new Ids();
 }
 
 inherits(PnElementFactory, BaseElementFactory);
 
 PnElementFactory.$inject = [
-	// 'moddle',
+	'moddle',
 	'elementRegistry'
 ];
 

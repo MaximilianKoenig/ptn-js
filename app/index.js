@@ -2,6 +2,8 @@ import $ from 'jquery';
 import OlcModeler from "./lib/olcmodeler/OlcModeler";
 import PnModeler from "./lib/pnmodeler/PnModeler";
 
+import { upload, download } from "./lib/util/FileUtil";
+
 const olcModeler = new OlcModeler({
   container: document.querySelector('#olc-canvas'),
   keyboard: { 
@@ -29,6 +31,24 @@ $(function() {
   createNewDiagram();
 });
 
+document.getElementById('openButton').addEventListener('click', () => upload((data) => {
+  importFromFile(data);
+}));
+
+document.getElementById('saveButton').addEventListener('click', () => exportXML().then(xml => {
+  download('PetriNet.xml', xml);
+}));
+
+async function exportXML() {
+  const pnXML = (await pnModeler.saveXML({format: true})).xml;
+  console.log(pnXML);
+  return pnXML;
+}
+
+async function importFromFile(file) {
+  await pnModeler.importXML(file);
+}
+
 Array.from(document.getElementsByClassName("canvas")).forEach(element => {
   element.tabIndex = 0;
   element.addEventListener('mouseenter', event => {
@@ -42,5 +62,7 @@ Array.from(document.getElementsByClassName("canvas")).forEach(element => {
 // const canvas = document.getElementById("pn-canvas")
 // canvas.tabIndex = 0;
 // canvas.addEventListener('mouseenter', event => {
-//   canvas.focus();
+//   if (document.activeElement.className !== 'djs-direct-editing-content') {
+//     canvas.focus();
+//   }
 // });

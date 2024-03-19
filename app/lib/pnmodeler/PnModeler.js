@@ -53,13 +53,22 @@ import PaletteModule from './palette';
 import PnDrawModule from './draw';
 import PnModelingModule from './modeling';
 import PnRulesModule from './rules';
+import PnModdle from './moddle';
 
 
 
 
 
 // TODO
-const exampleDiagram = ``;
+const emptyDiagram =
+    `<?xml version="1.0" encoding="UTF-8"?>
+<pn:definitions xmlns:pn="http://bptlab/schema/pn" xmlns:pnDi="http://bptlab/schema/pnDi">
+    <pn:PetriNet id="test" name="One">
+        <pn:place name="Foo" id="Place_0" type="pn:Place" x="119" y="177" />
+        <pn:Transition name="Bar" id="Transition_0" type="pn:Transition" x="289" y="177" />
+        <pn:Arc id="Arc_0" type="pn:Arc" source="Place_0" target="Transition_0" />
+    </pn:PetriNet>
+</pn:definitions>`;
 
 export default function PnModeler(options) {
     const {
@@ -99,10 +108,10 @@ export default function PnModeler(options) {
         PnModelingModule,
         PnAutoPlaceModule,
         PnRulesModule,
-        // {
-        //     moddle: ['value', new PnModdle({})],
-        //     pnModeler: ['value', this]
-        // }
+        {
+            moddle: ['value', new PnModdle({})],
+            pnModeler: ['value', this]
+        }
     ];
 
     const diagramOptions = {
@@ -125,5 +134,156 @@ export default function PnModeler(options) {
 inherits(PnModeler, Diagram);
 
 PnModeler.prototype.createNew = function () {
-    console.log("test");
+    return this.importXML(emptyDiagram);
 }
+
+PnModeler.prototype.importXML = function (xml) {
+    const self = this;
+
+    return new Promise(function (resolve, reject) {
+        // hook in pre-parse listeners +
+        // allow xml manipulation
+        xml = self._emit('import.parse.start', {xml: xml}) || xml;
+
+        self.get('moddle').fromXML(xml).then(function (result) {
+            let definitions = result.rootElement;
+            const { references, warnings, elementsById } = result;
+
+            const context = {
+                references,
+                elementsById,
+                warnings
+            };
+
+            for (let id in elementsById) {
+                self.get('elementFactory')._ids.claim(id, elementsById[id]);
+            }
+
+            definitions = self._emit('import.parse.complete', {
+                definitions,
+                context
+            }) || definitions;
+
+            self.importDefinitions(definitions);
+            self._emit('import.done', {error: null, warnings: null});
+            resolve();
+        }).catch(function (err) {
+
+            self._emit('import.parse.failed', {
+                error: err
+            });
+
+            self._emit('import.done', {error: err, warnings: err.warnings});
+
+            return reject(err);
+        });
+    });
+}
+
+PnModeler.prototype.importDefinitions = function (definitions) {
+    this.get('elementFactory')._ids.clear();
+    this._definitions = definitions;
+    this._emit('import.render.start', {definitions: definitions});
+    this.showPn(definitions.petriNets[0]);
+    this._emit('import.render.complete', {});
+}
+
+PnModeler.prototype.showPn = function (petriNet) {
+    this.clear();
+    this._petriNet = petriNet;
+    if (petriNet) {
+        const elementFactory = this.get('elementFactory');
+        const daigramRoot = elementFactory.createRoot({ type: 'pn:PetriNet', businessObject: petriNet });
+        const canvas = this.get('canvas');
+        canvas.setRootElement(daigramRoot);
+
+        const elements = groupBy(petriNet.get('Elements'), element => element.$type);
+        const places = {};
+        const transitions = {};
+
+        (elements['pn:Place'] || []).forEach(place => {
+            const placeVisual = elementFactory.createShape({
+                type: 'pn:Place',
+                businessObject: place,
+                x: parseInt(place.get('x')),
+                y: parseInt(place.get('y'))
+            });
+            places[place.id] = placeVisual;
+            canvas.addShape(placeVisual, daigramRoot);
+        });
+
+        (elements['pn:Transition'] || []).forEach(transition => {
+            const transitionVisual = elementFactory.createShape({
+                type: 'pn:Transition',
+                businessObject: transition,
+                x: parseInt(transition.get('x')),
+                y: parseInt(transition.get('y'))
+            });
+            transitions[transition.id] = transitionVisual;
+            canvas.addShape(transitionVisual, daigramRoot);
+        });
+
+        (elements['pn:Arc'] || []).forEach(arc => {
+            const sourceId = arc.get('source').get('id');
+            const targetId = arc.get('target').get('id');
+
+            const source = places[sourceId] || transitions[sourceId];
+            const target = places[targetId] || transitions[targetId];
+            
+            const arcVisual = elementFactory.createConnection({
+                type: 'pn:Arc',
+                businessObject: arc,
+                source,
+                target,
+                waypoints: this.get('pnUpdater').connectionWaypoints(source, target)
+            });
+            canvas.addConnection(arcVisual, daigramRoot);
+        });
+    }
+}
+
+PnModeler.prototype.saveXML = function (options) {
+    options = options || {};
+
+    const self = this;
+
+    let definitions = this._definitions;
+
+    return new Promise(function (resolve, reject) {
+
+        if (!definitions) {
+            const err = new Error('no xml loaded');
+
+            return reject(err);
+        }
+
+        // allow to fiddle around with definitions
+        definitions = self._emit('saveXML.start', {
+            definitions: definitions
+        }) || definitions;
+
+        self.get('moddle').toXML(definitions, options).then(function (result) {
+            const xml = result.xml;
+            // try {
+            //     xml = self._emit('saveXML.serialized', {
+            //         error: null,
+            //         xml: xml
+            //     }) || xml;
+
+            //     self._emit('saveXML.done', {
+            //         error: null,
+            //         xml: xml
+            //     });
+            // } catch (e) {
+            //     console.error('error in saveXML life-cycle listener', e);
+            // }
+            return resolve({xml: xml});
+        }).catch(function (err) {
+            return reject(err);
+        });
+    });
+};
+
+PnModeler.prototype._emit = function (type, event) {
+    return this.get('eventBus').fire(type, event);
+};

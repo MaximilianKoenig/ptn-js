@@ -1,0 +1,121 @@
+{
+  "namne": "Petri nets",
+  "uri": "http://bptlab/schema/pn",
+  "prefix": "pn",
+  "xml": {
+    "tagAlias": "lowerCase"
+  },
+  "types": [
+    {
+      "name": "PnElement",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "type": "String",
+          "isId": true
+        },
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "Place",
+      "superClass": ["PnElement"],
+      "properties": [
+        {
+          "name": "tokens",
+          "isAttr": true,
+          "type": "Int"
+        }
+      ]
+    },
+    {
+      "name": "Transition",
+      "superClass": ["PnElement"],
+      "properties": [
+        {
+          "name": "isSilent",
+          "isAttr": true,
+          "type": "Boolean"
+        }
+      ]
+    },
+    {
+      "name": "Arc",
+      "superClass": ["PnElement"],
+      "properties": [
+        {
+          "name": "source",
+          "isAttr": true,
+          "type": "PnElement",
+          "isReference": true
+        },
+        {
+          "name": "target",
+          "isAttr": true,
+          "type": "PnElement",
+          "isReference": true
+        },
+        {
+          "name": "weight",
+          "isAttr": true,
+          "type": "Int"
+        }
+      ]
+    },
+    {
+      "name": "PetriNet",
+      "superClass": ["PnElement"],
+      "properties": [
+        {
+          "name": "Elements",
+          "type": "PnElement",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "Definitions",
+      "superClass": ["PnElement"],
+      "properties": [
+        {
+          "name": "targetNamespace",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "expressionLanguage",
+          "default": "http://www.w3.org/1999/XPath",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "typeLanguage",
+          "default": "http://www.w3.org/2001/XMLSchema",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "petriNets",
+          "type": "PetriNet",
+          "isMany": true
+        },
+        {
+          "name": "exporter",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "exporterVersion",
+          "isAttr": true,
+          "type": "String"
+        }
+      ]
+    }
+  ]
+}
