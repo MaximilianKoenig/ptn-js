@@ -6,7 +6,7 @@ import {
 } from "diagram-js/lib/features/auto-place/AutoPlaceUtil";
 
 export function getNewShapePosition(source, element) {
-  if (element.type === 'pn:Place' || element.type === 'pn:Transition') {
+  if (element.type === 'ptn:Place' || element.type === 'ptn:Transition') {
     return getFlowNodePosition(source, element);
   }
 }
@@ -21,7 +21,7 @@ export function getFlowNodePosition(source, element) {
 
   const horizontalDistance = getConnectedDistance(source, {
     filter: function filter(connection) {
-      return connection.type === 'pn:Arc';
+      return connection.type === 'ptn:Arc';
     }
   });
 

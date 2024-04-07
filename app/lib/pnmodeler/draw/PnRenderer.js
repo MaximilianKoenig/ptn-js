@@ -261,11 +261,11 @@ PnRenderer.prototype.canRender = function (element) {
 };
 
 PnRenderer.prototype.drawShape = function (parentGfx, element) {
-  if (element.type === 'pn:Place') {
+  if (element.type === 'ptn:Place') {
     return this.drawPlace(parentGfx, element);
-  } else if (element.type === 'pn:Transition') {
+  } else if (element.type === 'ptn:Transition') {
     return this.drawTransition(parentGfx, element);
-  } else if (element.type === 'pn:Arc') {
+  } else if (element.type === 'ptn:Arc') {
     return this.drawArc(parentGfx, element);
   }
 };
@@ -273,9 +273,9 @@ PnRenderer.prototype.drawShape = function (parentGfx, element) {
 PnRenderer.prototype.drawConnection = PnRenderer.prototype.drawShape;
 
 PnRenderer.prototype.getShapePath = function (element) {
-  if (element.type === 'pn:Place') {
+  if (element.type === 'ptn:Place') {
     return getPlacePath(element.x, element.y, element.width, element.height);
-  } else if (element.type === 'pn:Transition') {
+  } else if (element.type === 'ptn:Transition') {
     return getTransitionPath(element.x, element.y, element.width, element.height);
   }
 };

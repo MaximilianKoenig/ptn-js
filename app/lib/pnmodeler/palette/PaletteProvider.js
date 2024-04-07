@@ -88,10 +88,10 @@ PaletteProvider.prototype.getPaletteEntries = function (element) {
       separator: true
     },
     'create-place': createAction(
-      'pn:Place', 'pn-elements', 'pn-icon-place', translate('Create place'),
+      'ptn:Place', 'pn-elements', 'pn-icon-place', translate('Create place'),
     ),
     'create-transition': createAction(
-      'pn:Transition', 'pn-elements', 'pn-icon-transition', translate('Create transition'),
+      'ptn:Transition', 'pn-elements', 'pn-icon-transition', translate('Create transition'),
     )
   })
   return actions;

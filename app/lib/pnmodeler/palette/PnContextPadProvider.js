@@ -35,25 +35,25 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   function appendPlace(event, element) {
-    const shape = elementFactory.createShape({ type: 'pn:Place' });
+    const shape = elementFactory.createShape({ type: 'ptn:Place' });
 
-    autoPlace.append(element, shape, { connection: { type: 'pn:Arc' } });
+    autoPlace.append(element, shape, { connection: { type: 'ptn:Arc' } });
   }
 
   function appendPlaceStart(event) {
-    const shape = elementFactory.createShape({ type: 'pn:Place' });
+    const shape = elementFactory.createShape({ type: 'ptn:Place' });
 
     create.start(event, shape, { source: element });
   }
 
   function appendTransition(event, element) {
-    const shape = elementFactory.createShape({ type: 'pn:Transition' });
+    const shape = elementFactory.createShape({ type: 'ptn:Transition' });
 
-    autoPlace.append(element, shape, { connection: { type: 'pn:Arc' } });
+    autoPlace.append(element, shape, { connection: { type: 'ptn:Arc' } });
   }
 
   function appendTransitionStart(event) {
-    const shape = elementFactory.createShape({ type: 'pn:Transition' });
+    const shape = elementFactory.createShape({ type: 'ptn:Transition' });
 
     create.start(event, shape, { source: element });
   }
@@ -72,7 +72,7 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   // Transition & Place actions
-  if (element.type === 'pn:Place' || element.type === 'pn:Transition') {
+  if (element.type === 'ptn:Place' || element.type === 'ptn:Transition') {
     assign(actions, {
       'connect': {
         group: 'edit',
@@ -87,7 +87,7 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   // Transition actions
-  if (element.type === 'pn:Transition') {
+  if (element.type === 'ptn:Transition') {
     assign(actions, {
       'append-place': {
         group: 'create',
@@ -102,7 +102,7 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   // Place actions
-  if (element.type === 'pn:Place') {
+  if (element.type === 'ptn:Place') {
     assign(actions, {
       'append-transition': {
         group: 'create',

@@ -25,8 +25,8 @@ PnRuleProvider.prototype.init = function () {
   this.addRule('connection.start', function (context) {
     const source = context.source;
     return (
-      source.type === 'pn:Place' || source.type === 'pn:Transition'
-    ) && { type: 'pn:Arc' };
+      source.type === 'ptn:Place' || source.type === 'ptn:Transition'
+    ) && { type: 'ptn:Arc' };
   });
 
   this.addRule('connection.reconnect', function (context) {
@@ -41,7 +41,7 @@ PnRuleProvider.prototype.init = function () {
   });
 
   this.addRule('shape.resize', function (context) {
-    if (context.shape.type === 'pn:Transition') {
+    if (context.shape.type === 'ptn:Transition') {
       return true;
     }
     return false;
@@ -51,7 +51,7 @@ PnRuleProvider.prototype.init = function () {
 PnRuleProvider.prototype.canConnect = canConnect;
 
 function canConnect(source, target) {
-  return ((source.type === 'pn:Place' && target.type === 'pn:Transition')
-    || (source.type === 'pn:Transition' && target.type === 'pn:Place')
-  ) && { type: 'pn:Arc' };
+  return ((source.type === 'ptn:Place' && target.type === 'ptn:Transition')
+    || (source.type === 'ptn:Transition' && target.type === 'ptn:Place')
+  ) && { type: 'ptn:Arc' };
 }
