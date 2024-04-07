@@ -1,5 +1,6 @@
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 import inherits from 'inherits';
+import UpdateLabelHandler from './UpdateLabelHandler';
 
 export default function PnModeling(eventBus, elementFactory, commandStack) {
     BaseModeling.call(this, eventBus, elementFactory, commandStack);
@@ -26,13 +27,4 @@ PnModeling.prototype.getHandlers = function () {
   const handlers = BaseModeling.prototype.getHandlers.call(this);
   handlers['element.updateLabel'] = UpdateLabelHandler;
   return handlers;
-}
-
-function UpdateLabelHandler() {
-}
-
-UpdateLabelHandler.prototype.execute = function (context) {
-  const { element, newLabel } = context;
-  element.label = { text: newLabel };
-  return element;
 }

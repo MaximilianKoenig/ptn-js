@@ -13,7 +13,9 @@ import {
 } from 'min-dash';
 import { componentsToPath } from 'diagram-js/lib/util/RenderUtil';
 import Ids from "ids";
+
 import { DEFAULT_TEXT_SIZE } from "./TextRenderer";
+import { getLabel } from "../modeling/LabelUtil";
 
 const RENDERER_IDS = new Ids();
 
@@ -76,7 +78,7 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
     // });
     // svgAppend(parentGfx, shape);
     const circle = drawCircle(parentGfx, element.width, element.height, 0, {});
-    if (element.label) {
+    if (element.businessObject.name) {
       renderExternalLabel(parentGfx, element, {});
     }
     return circle;
@@ -112,9 +114,10 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
 
     svgAppend(parentGfx, arc);
 
-    if (element.label) {
-      renderExternalLabel(parentGfx, element, {});
-    }
+    // TODO: Check if this is necessary or results in duplicated labels
+    // if (element.businessObject.weight) {
+    //   renderExternalLabel(parentGfx, element, {});
+    // }
 
     return arc;
   };
@@ -202,9 +205,7 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
       }
     }, attrs);
 
-    console.log(label);
-
-    const text = textRenderer.createText(label || '', attrs);
+    const text = textRenderer.createText(label, attrs);
 
     svgClasses(text).add('djs-label');
 
@@ -214,7 +215,7 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
   }
 
   function renderEmbeddedLabel(parentGfx, element, align, fontSize) {
-    return renderLabel(parentGfx, element.label ? element.label.text : '', {
+    return renderLabel(parentGfx, getLabel(element), {
       box: element,
       align: align,
       padding: 5,
@@ -233,7 +234,7 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
       y: element.height / 2 + element.y
     };
 
-    return renderLabel(parentGfx, element.label.text, {
+    return renderLabel(parentGfx, getLabel(element), {
       box: box,
       fitBox: true,
       style: assign(
@@ -267,6 +268,8 @@ PnRenderer.prototype.drawShape = function (parentGfx, element) {
     return this.drawTransition(parentGfx, element);
   } else if (element.type === 'ptn:Arc') {
     return this.drawArc(parentGfx, element);
+  } else if (element.type === 'label') {
+    return this.renderExternalLabel(parentGfx, element);
   }
 };
 

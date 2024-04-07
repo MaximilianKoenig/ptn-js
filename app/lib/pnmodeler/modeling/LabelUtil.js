@@ -1,5 +1,46 @@
+import { isAny } from '../../util/Util';
 
-const DEFAULT_LABEL_SIZE = {
+export function getLabel(element) {
+  const businessObject = element.businessObject;
+  const attr = getLabelAttribute(element);
+  if (attr) {
+    return businessObject[attr] || '';
+  }
+}
+
+export function getLabelAttribute(element) {
+  const businessObject = element.businessObject;
+  if (isAny(businessObject, ['ptn:Place', 'ptn:Transition'])) {
+    return 'name';
+  } else if (isAny(businessObject, ['ptn:Arc'])) {
+    return 'weight';
+  }
+}
+
+export function setLabel(element, text) {
+  const businessObject = element.businessObject;
+  const attr = getLabelAttribute(element);
+  if (attr) {
+    businessObject[attr] = text;
+  }
+  return element;
+}
+
+export function isLabel(element) {
+  return element && !!element.labelTarget;
+}
+
+// Returns true if there exists an external label for the given element
+export function existsExternalLabel(element) {
+  return isLabel(element.label);
+}
+
+// Returns true if labels for that type of element are external
+export function requiresExternalLabel(element) {
+  return isAny(element.businessObject, ['ptn:Place', 'ptn:Arc']);
+}
+
+export const DEFAULT_LABEL_SIZE = {
   width: 90,
   height: 20
 };

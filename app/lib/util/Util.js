@@ -1,4 +1,11 @@
 // TODO: Split into renderUtil and misc util
+import {some} from 'min-dash';
+
+export function isAny(element, types) {
+    return some(types, function (t) {
+        return is(element, t);
+    });
+}
 
 export function is(element, type) {
     var bo = getBusinessObject(element);

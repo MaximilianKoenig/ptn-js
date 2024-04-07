@@ -1,6 +1,6 @@
 import { assign } from "min-dash";
 import { isLabel } from "diagram-js/lib/util/ModelUtil";
-import { getExternalLabelMid } from "./LabelUtil";
+import { existsExternalLabel, getExternalLabelMid, getLabel, requiresExternalLabel } from "./LabelUtil";
 
 export default function PnLabelEditing(eventBus, canvas, directEditing, commandStack, textRenderer) {
  directEditing.registerProvider(this);
@@ -63,19 +63,19 @@ PnLabelEditing.$inject = [
 
 PnLabelEditing.prototype.activate = function(element) {
   // const text = element.businessObject.name || '';
-  const text = element.label ? element.label.text : '';
+  const text = getLabel(element) || '';
 
   const editingBox = this.getEditingBBox(element);
 
   let options = {};
 
-  if (element.type === 'pn:Transition') {
+  if (element.type === 'ptn:Transition') {
     assign(options, {
       centerVertically: true
     });
   }
 
-  if (element.type === 'pn:Place' || element.type === 'pn:Arc') {
+  if (element.type === 'ptn:Place' || element.type === 'ptn:Arc') {
     assign(options, {
       autoResize: true
     });
@@ -99,9 +99,6 @@ PnLabelEditing.prototype.getEditingBBox = function(element) {
   const target = element;
 
   const bbox = canvas.getAbsoluteBBox(target);
-  console.log('### BBox ###')
-  console.log(target);
-  console.log(bbox);
 
   const mid = {
     x: bbox.x + bbox.width / 2,
@@ -126,7 +123,7 @@ PnLabelEditing.prototype.getEditingBBox = function(element) {
   }
 
   // Internal labels for transitions
-  if (element.type === 'pn:Transition') {
+  if (element.type === 'ptn:Transition') {
     assign(bounds, {
       width: bbox.width,
       height: bbox.height
@@ -148,7 +145,7 @@ PnLabelEditing.prototype.getEditingBBox = function(element) {
   const paddingBottom = 4 * zoom;
 
   // Existing external labels for places and arcs
-  if (target.labelTarget && (element.type === 'pn:Place' || element.type === 'pn:Arc')) {
+  if (target.labelTarget) {
     assign(bounds, {
       width: width,
       height: bbox.height + paddingTop + paddingBottom,
@@ -166,7 +163,7 @@ PnLabelEditing.prototype.getEditingBBox = function(element) {
 
   // External label does not exist yet
   // !isLabel(target.label) is used by bpmn.js, not sure why
-  if (!isLabel(target) && (element.type === 'pn:Place' || element.type === 'pn:Arc')) {
+  if (!isLabel(target) && requiresExternalLabel(target) && !existsExternalLabel(target)) {
     const externalLabelMid = getExternalLabelMid(element);
 
     const absoluteBBox = canvas.getAbsoluteBBox({
