@@ -1,54 +1,68 @@
-import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
-import inherits from 'inherits';
-import { assign } from 'min-dash';
-import Ids from 'ids';
+import { assign, map } from 'min-dash';
+import { isAny } from '../../util/Util';
 
-export default function PnElementFactory(moddle, elementRegistry) {
-	BaseElementFactory.call(this);
+
+export default function PnElementFactory(moddle) {
 	this._moddle = moddle;
-	this._elementRegistry = elementRegistry;
-	this._ids = new Ids();
 }
 
-inherits(PnElementFactory, BaseElementFactory);
+PnElementFactory.$inject = ['moddle'];
 
-PnElementFactory.$inject = [
-	'moddle',
-	'elementRegistry'
-];
-
-PnElementFactory.prototype.baseCreate = BaseElementFactory.prototype.create;
-PnElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.createShape;
-
-PnElementFactory.prototype.defaultSizeForType = function (type) {
-	return { width: 50, height: 50 };
-};
-
-PnElementFactory.prototype.createShape = function (attrs) {
-	attrs = assign(this.defaultSizeForType(attrs.type), attrs);
-	return this.baseCreateShape(attrs);
+PnElementFactory.prototype._needsId = function(element) {
+	return isAny(element, ['ptn:PtnElement']);
 }
 
-PnElementFactory.prototype.create = function (elementType, attrs) {
-	attrs = attrs || {};
-	attrs = assign(this.defaultSizeForType(attrs.type), attrs);
+PnElementFactory.prototype._ensureId = function(element) {
+	if (!element.id && this._needsId(element)) {
+		const prefix = (element.$type || '').replace(/^[^:]*:/g, '') + '_';
+		element.id = this._moddle.ids.nextPrefixed(prefix, element);
+	} else if (this._moddle.ids.assigned(element.id)) {
+		throw new Error('Cannot create element, id "' + element.id + '" already exists');
+	}
+}
 
-	// let businessObject = attrs.businessObject;
+PnElementFactory.prototype.create = function(elementType, attrs) {
+	const element = this._moddle.create(elementType, attrs || {});
+	this._ensureId(element);
+	return element;
+}
 
-	// if (!businessObject) {
-	//     if (!attrs.type) {
-	//         throw new Error('no element type specified');
-	//     }
-	//     let businessAttrs = assign({}, attrs);
-	//     delete businessAttrs.width;
-	//     delete businessAttrs.height;
-	//     businessObject = this.createBusinessObject(businessAttrs.type, businessAttrs);
-	// }
+PnElementFactory.prototype.createDiBounds = function(bounds) {
+	return this.create('dc:Bounds', bounds);
+}
 
-	// attrs = assign({
-	//     businessObject: businessObject,
-	//     id: businessObject.id
-	// }, attrs);
+PnElementFactory.prototype.createDiLabel = function(shape) {
+	return this.create('ptnDi:PtnLabel', {
+		bounds: this.createDiBounds()
+	});
+}
 
-	return this.baseCreate(elementType, attrs);
+PnElementFactory.prototype.createDiShape = function(businessObject, bounds, attrs) {
+	return this.create('ptnDi:PtnShape', assign({
+		ptnElement: businessObject,
+		bounds: this.createDiBounds(bounds)
+	}, attrs));
+}
+
+PnElementFactory.prototype.createDiEdge = function(businessObject, waypoints, attrs) {
+	return this.create('ptnDi:PtnEdge', assign({
+		ptnElement: businessObject,
+	}, attrs));
+}
+
+PnElementFactory.prototype.createDiPlane = function(businessObject) {
+	return this.create('ptnDi:PtnPlane', {
+		ptnElement: businessObject
+	});
+}
+
+PnElementFactory.prototype.createDiWaypoints = function(waypoints) {
+	const self = this;
+	return map(waypoints, function(waypoint) {
+		return self.createDiWaypoint(waypoint);
+	});
+}
+
+PnElementFactory.prototype.createDiWaypoint = function(waypoint) {
+	return this.create('dc:Point', pick(waypoint, ['x', 'y']));
 }
