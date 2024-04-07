@@ -1,13 +1,13 @@
 {
-  "namne": "Petri nets",
-  "uri": "http://bptlab/schema/pn",
-  "prefix": "pn",
+  "name": "Place Transition nets",
+  "uri": "http://bptlab/schema/ptn",
+  "prefix": "ptn",
   "xml": {
     "tagAlias": "lowerCase"
   },
   "types": [
     {
-      "name": "PnElement",
+      "name": "PtnElement",
       "isAbstract": true,
       "properties": [
         {
@@ -25,63 +25,57 @@
     },
     {
       "name": "Place",
-      "superClass": ["PnElement"],
+      "superClass": ["PtnElement"],
       "properties": [
         {
-          "name": "tokens",
+          "name": "marking",
           "isAttr": true,
-          "type": "Int"
+          "type": "String"
         }
       ]
     },
     {
       "name": "Transition",
-      "superClass": ["PnElement"],
-      "properties": [
-        {
-          "name": "isSilent",
-          "isAttr": true,
-          "type": "Boolean"
-        }
-      ]
+      "superClass": ["PtnElement"],
+      "properties": []
     },
     {
       "name": "Arc",
-      "superClass": ["PnElement"],
+      "superClass": ["PtnElement"],
       "properties": [
         {
           "name": "source",
           "isAttr": true,
-          "type": "PnElement",
+          "type": "PtnElement",
           "isReference": true
         },
         {
           "name": "target",
           "isAttr": true,
-          "type": "PnElement",
+          "type": "PtnElement",
           "isReference": true
         },
         {
           "name": "weight",
           "isAttr": true,
-          "type": "Int"
+          "type": "String"
         }
       ]
     },
     {
-      "name": "PetriNet",
-      "superClass": ["PnElement"],
+      "name": "PtNet",
+      "superClass": ["PtnElement"],
       "properties": [
         {
           "name": "Elements",
-          "type": "PnElement",
+          "type": "PtnElement",
           "isMany": true
         }
       ]
     },
     {
       "name": "Definitions",
-      "superClass": ["PnElement"],
+      "superClass": ["PtnElement"],
       "properties": [
         {
           "name": "targetNamespace",
@@ -101,8 +95,13 @@
           "type": "String"
         },
         {
-          "name": "petriNets",
-          "type": "PetriNet",
+          "name": "ptNets",
+          "type": "PtNet",
+          "isMany": true
+        },
+        {
+          "name": "ptnDiagrams",
+          "type": "ptnDi:PtnDiagram",
           "isMany": true
         },
         {

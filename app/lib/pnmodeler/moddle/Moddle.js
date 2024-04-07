@@ -44,7 +44,7 @@ PnModdle.prototype = Object.create(Moddle.prototype);
  * Instantiates a Petri net model tree from a given xml string.
  *
  * @param {String}   xmlStr
- * @param {String}   [typeName='pn:Definitions'] name of the root element
+ * @param {String}   [typeName='ptn:Definitions'] name of the root element
  * @param {Object}   [options]  options to pass to the underlying reader
  *
  * @returns {Promise<ParseResult, ParseError>}
@@ -53,7 +53,7 @@ PnModdle.prototype = Object.create(Moddle.prototype);
 PnModdle.prototype.fromXML = function (xmlStr, typeName, options) {
   if (!isString(typeName)) {
     options = typeName;
-    typeName = 'pn:Definitions';
+    typeName = 'ptn:Definitions';
   }
 
   const reader = new Reader(assign({model: this, lax: false}, options));
@@ -73,7 +73,7 @@ PnModdle.prototype.fromXML = function (xmlStr, typeName, options) {
 /**
  * Serializes a Petri net object tree to XML.
  *
- * @param {String}   element    the root element, typically an instance of `pn:Definitions`
+ * @param {String}   element    the root element, typically an instance of `ptn:Definitions`
  * @param {Object}   [options]  to pass to the underlying writer
  *
  * @returns {Promise<SerializationResult, Error>}
