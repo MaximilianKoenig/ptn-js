@@ -66,3 +66,7 @@ PnElementFactory.prototype.createDiWaypoints = function(waypoints) {
 PnElementFactory.prototype.createDiWaypoint = function(waypoint) {
 	return this.create('dc:Point', pick(waypoint, ['x', 'y']));
 }
+
+PnElementFactory.prototype.defaultSizeForType = function(element) {
+	return { width: 50, height: 50 };
+}

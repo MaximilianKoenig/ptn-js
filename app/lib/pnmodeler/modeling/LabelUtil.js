@@ -1,4 +1,5 @@
 import { isAny } from '../../util/Util';
+import { assign } from 'min-dash';
 
 export function getLabel(element) {
   const businessObject = element.businessObject;
@@ -57,6 +58,41 @@ export function getExternalLabelMid(element) {
       y: element.y + element.height + DEFAULT_LABEL_SIZE.height / 2
     };
   }
+}
+
+export function getExternalLabelBounds(businessObject, element) {
+
+  let mid;
+  let size;
+  let bounds;
+
+  const di = businessObject.di;
+  const label = di['label'];
+  console.log(label);
+
+  if (label && label.bounds) {
+      bounds = label.bounds;
+
+      size = {
+          width: Math.max(DEFAULT_LABEL_SIZE.width, bounds.width),
+          height: bounds.height
+      };
+
+      mid = {
+          x: bounds.x + bounds.width / 2,
+          y: bounds.y + bounds.height / 2
+      };
+  } else {
+
+      mid = getExternalLabelMid(element);
+
+      size = DEFAULT_LABEL_SIZE;
+  }
+
+  return assign({
+      x: mid.x - size.width / 2,
+      y: mid.y - size.height / 2
+  }, size);
 }
 
 function getFlowLabelPosition(waypoints) {

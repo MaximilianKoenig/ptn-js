@@ -44,10 +44,10 @@
       "name": "PtnPlane",
       "properties": [
         {
-          "name": "ptNet",
+          "name": "ptnElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtNet"
+          "type": "ptn:PtnElement"
         }
       ],
       "superClass": ["Plane"]

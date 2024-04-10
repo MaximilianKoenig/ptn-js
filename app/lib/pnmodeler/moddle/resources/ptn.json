@@ -67,7 +67,7 @@
       "superClass": ["PtnElement"],
       "properties": [
         {
-          "name": "Elements",
+          "name": "ptnElements",
           "type": "PtnElement",
           "isMany": true
         }

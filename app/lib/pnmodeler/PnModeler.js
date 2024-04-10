@@ -25,6 +25,7 @@ import PaletteModule from 'diagram-js/lib/features/palette';
 import RulesModule from 'diagram-js/lib/features/rules';
 import SelectionModule from 'diagram-js/lib/features/selection';
 import SnappingModule from 'diagram-js/lib/features/snapping';
+import TranslateModule from 'diagram-js/lib/i18n/translate';
 
 // Custom common Modules
 import KeyboardModule from '../common/keyboard';
@@ -50,10 +51,11 @@ import PnAutoPlaceModule from './auto-place';
 
 // Modeler-specific modules
 import PaletteModule from './palette';
-import PnDrawModule from './draw';
+import PnCoreModule from './core';
 import PnModelingModule from './modeling';
 import PnRulesModule from './rules';
 import PnModdle from './moddle';
+import { importPnDiagram } from './import/Importer';
 
 
 
@@ -67,7 +69,7 @@ const emptyDiagram =
         <ptn:place id="place_1" name="place_1" marking="1"/>
     </ptn:ptNet>
     <ptnDi:ptnDiagram id="ptNet_1_di">
-        <ptnDi:ptnPlane id="ptNet_1_plane" ptNet="ptNet_1">
+        <ptnDi:ptnPlane id="ptNet_1_plane" ptnElement="ptNet_1">
         <ptnDi:ptnShape id="place_1_di" ptnElement="place_1">
             <dc:Bounds x="100" y="100" width="50" height="50"/>
             <ptnDi:label>
@@ -107,12 +109,13 @@ export default function PnModeler(options) {
         ResizeModule,
         SnappingModule,
         TouchModule,
-        KeyboardMoveSelectionModule
+        KeyboardMoveSelectionModule,
+        TranslateModule
     ];
     
     const customModules = [
         PaletteModule,
-        PnDrawModule,
+        PnCoreModule,
         PnModelingModule,
         PnAutoPlaceModule,
         PnRulesModule,
@@ -147,13 +150,11 @@ PnModeler.prototype.createNew = function () {
 
 PnModeler.prototype.importXML = function (xml) {
     const self = this;
-    console.log(xml);
 
     return new Promise(function (resolve, reject) {
         // hook in pre-parse listeners +
         // allow xml manipulation
         xml = self._emit('import.parse.start', {xml: xml}) || xml;
-        console.log(self.get('moddle'));
 
         self.get('moddle').fromXML(xml, 'ptn:Definitions').then(function (result) {
             let definitions = result.rootElement;
@@ -175,8 +176,10 @@ PnModeler.prototype.importXML = function (xml) {
                 context
             }) || definitions;
 
-            console.log(definitions);
             self.importDefinitions(definitions);
+            self._emit('import.render.start', {definitions: definitions});
+            self.showPn(definitions);
+            self._emit('import.render.complete', {});
             self._emit('import.done', {error: null, warnings: null});
             resolve();
         }).catch(function (err) {
@@ -195,64 +198,15 @@ PnModeler.prototype.importXML = function (xml) {
 PnModeler.prototype.importDefinitions = function (definitions) {
     // this.get('elementFactory')._ids.clear();
     this._definitions = definitions;
-    this._emit('import.render.start', {definitions: definitions});
-    // this.showPn(definitions.petriNets[0]);
-    // this._emit('import.render.complete', {});
 }
 
-// PnModeler.prototype.showPn = function (petriNet) {
-//     this.clear();
-//     this._petriNet = petriNet;
-//     if (petriNet) {
-//         const elementFactory = this.get('elementFactory');
-//         const daigramRoot = elementFactory.createRoot({ type: 'ptn:PetriNet', businessObject: petriNet });
-//         const canvas = this.get('canvas');
-//         canvas.setRootElement(daigramRoot);
+PnModeler.prototype.showPn = function(definitions) {
+    this.clear();
 
-//         const elements = groupBy(petriNet.get('Elements'), element => element.$type);
-//         const places = {};
-//         const transitions = {};
-
-//         (elements['ptn:Place'] || []).forEach(place => {
-//             const placeVisual = elementFactory.createShape({
-//                 type: 'ptn:Place',
-//                 businessObject: place,
-//                 x: parseInt(place.get('x')),
-//                 y: parseInt(place.get('y'))
-//             });
-//             places[place.id] = placeVisual;
-//             canvas.addShape(placeVisual, daigramRoot);
-//         });
-
-//         (elements['ptn:Transition'] || []).forEach(transition => {
-//             const transitionVisual = elementFactory.createShape({
-//                 type: 'ptn:Transition',
-//                 businessObject: transition,
-//                 x: parseInt(transition.get('x')),
-//                 y: parseInt(transition.get('y'))
-//             });
-//             transitions[transition.id] = transitionVisual;
-//             canvas.addShape(transitionVisual, daigramRoot);
-//         });
-
-//         (elements['ptn:Arc'] || []).forEach(arc => {
-//             const sourceId = arc.get('source').get('id');
-//             const targetId = arc.get('target').get('id');
-
-//             const source = places[sourceId] || transitions[sourceId];
-//             const target = places[targetId] || transitions[targetId];
-            
-//             const arcVisual = elementFactory.createConnection({
-//                 type: 'ptn:Arc',
-//                 businessObject: arc,
-//                 source,
-//                 target,
-//                 waypoints: this.get('pnUpdater').connectionWaypoints(source, target)
-//             });
-//             canvas.addConnection(arcVisual, daigramRoot);
-//         });
-//     }
-// }
+    // We currently assume that we only import single diagrams
+    const rootDiagram = definitions.ptnDiagrams[0];
+    importPnDiagram(this, definitions, rootDiagram);
+}
 
 PnModeler.prototype.saveXML = function (options) {
     options = options || {};
