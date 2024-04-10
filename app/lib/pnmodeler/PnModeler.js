@@ -64,10 +64,17 @@ const emptyDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
 <ptn:definitions xmlns:ptn="http://bpt-lab.org/schemas/ptn" xmlns:ptnDi="http://bpt-lab.org/schemas/ptnDi" xmlns:dc="https://www.omg.org/spec/BPMN/20100501/DC.xsd">
     <ptn:ptNet id="ptNet_1" name="Place Transition Net 1">
+        <ptn:place id="place_1" name="place_1" marking="1"/>
     </ptn:ptNet>
     <ptnDi:ptnDiagram id="ptNet_1_di">
-    <ptnDi:ptnPlane id="ptNet_1_plane" ptNet="ptNet_1">
-    </ptnDi:ptnPlane>
+        <ptnDi:ptnPlane id="ptNet_1_plane" ptNet="ptNet_1">
+        <ptnDi:ptnShape id="place_1_di" ptnElement="place_1">
+            <dc:Bounds x="100" y="100" width="50" height="50"/>
+            <ptnDi:label>
+            <dc:Bounds x="100" y="100" width="50" height="50"/>
+        </ptnDi:label>
+      </ptnDi:ptnShape>
+        </ptnDi:ptnPlane>
     </ptnDi:ptnDiagram>
 </ptn:definitions>`;
 

@@ -1,6 +1,6 @@
 {
   "name": "Place Transition nets",
-  "uri": "http://bptlab/schema/ptn",
+  "uri": "http://bpt-lab.org/schemas/ptn",
   "prefix": "ptn",
   "xml": {
     "tagAlias": "lowerCase"

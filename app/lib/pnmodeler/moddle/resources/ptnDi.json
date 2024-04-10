@@ -1,6 +1,6 @@
 {
   "name": "Petri net Diagrams",
-  "uri": "http://bptlab/schema/ptnDi",
+  "uri": "http://bpt-lab.org/schemas/ptnDi",
   "prefix": "ptnDi",
   "xml": {
     "tagAlias": "lowerCase"
@@ -16,6 +16,29 @@
         }
       ],
       "superClass": ["Diagram"]
+    },
+    {
+      "name": "Diagram",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "isId": true,
+          "type": "String"
+        },
+        {
+          "name": "name",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "rootElement",
+          "type": "DiagramElement",
+          "isReadOnly": true,
+          "isVirtual": true
+        }
+      ]
     },
     {
       "name": "PtnPlane",
@@ -40,7 +63,7 @@
           "isMany": true
         }
       ],
-      "superClass": "DiagramElement"
+      "superClass": ["DiagramElement"]
     },
     {
       "name": "PtnShape",
@@ -197,29 +220,6 @@
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
-        }
-      ]
-    },
-    {
-      "name": "Diagram",
-      "isAbstract": true,
-      "properties": [
-        {
-          "name": "id",
-          "isAttr": true,
-          "isId": true,
-          "type": "String"
-        },
-        {
-          "name": "name",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "rootElement",
-          "type": "DiagramElement",
-          "isReadOnly": true,
-          "isVirtual": true
         }
       ]
     }

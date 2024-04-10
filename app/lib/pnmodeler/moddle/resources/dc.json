@@ -1,6 +1,6 @@
 {
   "name": "dc",
-  "uri": "http://www.omg.org/spec/DD/20100524/DC",
+  "uri": "https://www.omg.org/spec/BPMN/20100501/DC.xsd",
   "prefix": "dc",
   "types": [
     {
