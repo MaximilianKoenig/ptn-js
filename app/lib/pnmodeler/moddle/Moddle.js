@@ -1,3 +1,4 @@
+import Ids from 'ids';
 import {assign, isString} from 'min-dash';
 
 import {Moddle} from 'moddle';
@@ -17,6 +18,7 @@ import {Reader, Writer} from 'moddle-xml';
 
 export default function PnModdle(packages, options) {
   Moddle.call(this, packages, options);
+  this.ids = new Ids();
 }
 
 PnModdle.prototype = Object.create(Moddle.prototype);

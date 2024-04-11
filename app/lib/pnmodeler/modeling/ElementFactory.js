@@ -34,7 +34,7 @@ ElementFactory.prototype.createElement = function(elementType, attrs) {
   let businessObject = attrs.businessObject;
 
   if (!businessObject) {
-    businessObject = this._pnElementFactory.create(elementType, attrs);
+    businessObject = this._pnElementFactory.create(attrs.type, attrs);
   }
 
   if (!businessObject.di) {

@@ -191,9 +191,6 @@ PnImporter.prototype._getEnd = function (semantic, side) {
         refSemantic,
         translate = this._translate;
 
-    console.log(semantic);
-    console.log(side);
-
     refSemantic = semantic[side];
 
 

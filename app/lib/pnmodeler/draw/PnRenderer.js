@@ -78,9 +78,6 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
     // });
     // svgAppend(parentGfx, shape);
     const circle = drawCircle(parentGfx, element.width, element.height, 0, {});
-    if (element.businessObject.name) {
-      renderExternalLabel(parentGfx, element, {});
-    }
     return circle;
   };
 
@@ -114,11 +111,6 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
 
     svgAppend(parentGfx, arc);
 
-    // TODO: Check if this is necessary or results in duplicated labels
-    // if (element.businessObject.weight) {
-    //   renderExternalLabel(parentGfx, element, {});
-    // }
-
     return arc;
   };
 
@@ -130,6 +122,27 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
       pathData += 'L' + waypoints[i].x + ',' + waypoints[i].y + ' ';
     }
     return pathData;
+  }
+
+  this.renderExternalLabel = function(parentGfx, element, attrs = {}) {
+    const box = {
+      width: 90,
+      height: 30,
+      x: element.width / 2 + element.x,
+      y: element.height / 2 + element.y
+    };
+
+    return renderLabel(parentGfx, getLabel(element), {
+      box: box,
+      fitBox: true,
+      style: assign(
+        {},
+        textRenderer.getExternalStyle(),
+        {
+          fill: 'black'
+        }
+      )
+    });
   }
 
   // Move to helpers
@@ -224,27 +237,6 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
         fontsize: fontSize || DEFAULT_TEXT_SIZE
       },
     })
-  }
-
-  function renderExternalLabel(parentGfx, element, attrs = {}) {
-    const box = {
-      width: 90,
-      height: 30,
-      x: element.width / 2 + element.x,
-      y: element.height / 2 + element.y
-    };
-
-    return renderLabel(parentGfx, getLabel(element), {
-      box: box,
-      fitBox: true,
-      style: assign(
-        {},
-        textRenderer.getExternalStyle(),
-        {
-          fill: 'black'
-        }
-      )
-    });
   }
 }
 

@@ -1,8 +1,8 @@
-import { isAny } from '../../util/Util';
+import { getBusinessObject, isAny } from '../../util/Util';
 import { assign } from 'min-dash';
 
 export function getLabel(element) {
-  const businessObject = element.businessObject;
+  const businessObject = getBusinessObject(element);
   const attr = getLabelAttribute(element);
   if (attr) {
     return businessObject[attr] || '';
@@ -10,7 +10,7 @@ export function getLabel(element) {
 }
 
 export function getLabelAttribute(element) {
-  const businessObject = element.businessObject;
+  const businessObject = getBusinessObject(element);
   if (isAny(businessObject, ['ptn:Place', 'ptn:Transition'])) {
     return 'name';
   } else if (isAny(businessObject, ['ptn:Arc'])) {
@@ -38,7 +38,8 @@ export function existsExternalLabel(element) {
 
 // Returns true if labels for that type of element are external
 export function requiresExternalLabel(element) {
-  return isAny(element.businessObject, ['ptn:Place', 'ptn:Arc']);
+  const businessObject = getBusinessObject(element);
+  return isAny(businessObject, ['ptn:Place', 'ptn:Arc']);
 }
 
 export const DEFAULT_LABEL_SIZE = {
@@ -68,7 +69,6 @@ export function getExternalLabelBounds(businessObject, element) {
 
   const di = businessObject.di;
   const label = di['label'];
-  console.log(label);
 
   if (label && label.bounds) {
       bounds = label.bounds;
