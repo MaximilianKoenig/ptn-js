@@ -1,5 +1,4 @@
 import inherits from 'inherits';
-import { groupBy, without, findIndex } from 'min-dash'
 
 import Diagram from 'diagram-js';
 
@@ -156,7 +155,12 @@ PnModeler.prototype.importXML = function (xml) {
         // allow xml manipulation
         xml = self._emit('import.parse.start', {xml: xml}) || xml;
 
-        self.get('moddle').fromXML(xml, 'ptn:Definitions').then(function (result) {
+        const moddle = self.get('moddle');
+
+        console.log(moddle);
+        moddle.ids.clear();
+
+        moddle.fromXML(xml, 'ptn:Definitions').then(function (result) {
             let definitions = result.rootElement;
             const { references, warnings, elementsById } = result;
             console.log(result);
@@ -167,19 +171,18 @@ PnModeler.prototype.importXML = function (xml) {
                 warnings
             };
 
-            // for (let id in elementsById) {
-            //     self.get('elementFactory')._ids.claim(id, elementsById[id]);
-            // }
-
             definitions = self._emit('import.parse.complete', {
                 definitions,
                 context
             }) || definitions;
 
             self.importDefinitions(definitions);
+            self.collectIds(moddle, elementsById);
+
             self._emit('import.render.start', {definitions: definitions});
             self.showPn(definitions);
             self._emit('import.render.complete', {});
+
             self._emit('import.done', {error: null, warnings: null});
             resolve();
         }).catch(function (err) {
@@ -195,9 +198,14 @@ PnModeler.prototype.importXML = function (xml) {
     });
 }
 
-PnModeler.prototype.importDefinitions = function (definitions) {
-    // this.get('elementFactory')._ids.clear();
+PnModeler.prototype.importDefinitions = function (definitions, elementsById) {
     this._definitions = definitions;
+}
+
+PnModeler.prototype.collectIds = function (moddle, elementsById) {
+    for (let id in elementsById) {
+        moddle.ids.claim(id, elementsById[id]);
+    }
 }
 
 PnModeler.prototype.showPn = function(definitions) {
@@ -229,20 +237,20 @@ PnModeler.prototype.saveXML = function (options) {
         }) || definitions;
 
         self.get('moddle').toXML(definitions, options).then(function (result) {
-            const xml = result.xml;
-            // try {
-            //     xml = self._emit('saveXML.serialized', {
-            //         error: null,
-            //         xml: xml
-            //     }) || xml;
+            let xml = result.xml;
+            try {
+                xml = self._emit('saveXML.serialized', {
+                    error: null,
+                    xml: xml
+                }) || xml;
 
-            //     self._emit('saveXML.done', {
-            //         error: null,
-            //         xml: xml
-            //     });
-            // } catch (e) {
-            //     console.error('error in saveXML life-cycle listener', e);
-            // }
+                self._emit('saveXML.done', {
+                    error: null,
+                    xml: xml
+                });
+            } catch (e) {
+                console.error('error in saveXML life-cycle listener', e);
+            }
             return resolve({xml: xml});
         }).catch(function (err) {
             return reject(err);
