@@ -1,13 +1,19 @@
 import inherits from "inherits";
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
-import { center, is } from "../../util/Util";
+import { center, getBusinessObject, is } from "../../util/Util";
 import { remove as collectionRemove } from 'diagram-js/lib/util/Collections';
+import { isLabel } from "./LabelUtil";
+import { assign, forEach } from "min-dash";
 
-export default function PnUpdater(eventBus, connectionDocking) {
+export default function PnUpdater(eventBus, pnElementFactory, connectionDocking, translate) {
+
   CommandInterceptor.call(this, eventBus);
+
+  this._pnElementFactory = pnElementFactory;
   this._connectionDocking = connectionDocking;
+  this._translate = translate;
   // Maintain a reference to the original this object
-  that = this;
+  const self = this;
 
   // Crop connection ends to avoid overlapping with elements
   function cropConnection(e) {
@@ -16,7 +22,7 @@ export default function PnUpdater(eventBus, connectionDocking) {
 
     if (!context.cropped && hints.createElementsBehavior !== false) {
       const connection = context.connection;
-      // connection.waypoints = that.connectionWaypoints(connection.source, connection.target);
+      // connection.waypoints = self.connectionWaypoints(connection.source, connection.target);
       connection.waypoints = connectionDocking.getCroppedWaypoints(connection);
       context.cropped = true;
     }
@@ -29,206 +35,273 @@ export default function PnUpdater(eventBus, connectionDocking) {
   });
 
 
-  // // update parent
-  // this.executed([
-  //   'shape.create',
-  //   'connection.create'
-  // ], (event) => {
-  //   const context = event.context;
-  //   const element = context.shape || context.connection;
+  // DI Update
+  function updateParent(e) {
+    const context = e.context;
+    const element = context.shape || context.connection;
+    self.updateDiAndSemanticParent(element, context.oldParent);
+  }
 
-  //   linkToBusinessObjectParent(element)
-  // });
+  function reverseUpdateParent(e) {
+    const context = e.context;
+    const element = context.shape || context.connection;
+    const oldParent = context.parent ||context.newParent;
+    self.updateDiAndSemanticParent(element, oldParent);
+  }
 
-  // this.executed([
-  //   'shape.delete',
-  //   'connection.delete'
-  // ], (event) => {
-  //   const context = event.context;
-  //   const element = context.shape || context.connection;
+  this.executed([
+    'shape.move',
+    'shape.create',
+    'shape.delete',
+    'connection.create',
+    'connection.move',
+    'connection.delete'
+  ], ifPnElement(updateParent));
 
-  //   removeFromBusinessObjectParent(element)
-  // });
-
-  // // TODO!
-  // // this.reverted([
-  // //   'shape.create',
-  // //   'connection.create'
-  // // ], ...);
-
-  //   // TODO!
-  // // this.reverted([
-  // //   'shape.delete',
-  // //   'connection.delete'
-  // // ], ...);
-
-  // // TODO: check this ...
-  // this.executed(['connection.create'], (event) => {
-  //   const context = event.context;
-  //   const element = context.connection;
-
-  //   element.businessObject.source = element.source.businessObject;
-  //   element.businessObject.target = element.target.businessObject;
-  // });
-
-  // // this.executed([
-  // //   'shape.create',
-  // //   'shape.move'
-  // // ], event => {
-  // //     const element = event.context.shape;
-  // //     const {x, y} = element;
-  // //     const businessObject = element.businessObject;
-  // //     businessObject.set('x', x);
-  // //     businessObject.set('y', y);
-  // // });
-
-  // // // Update root element
-  // // function updateRoot(e) {
-  // //   const context = e.context;
-  // //   const oldRoot = context.oldRoot;
-  // //   const children = oldRoot.children;
-
-  // //   forEach(children, function(child) {
-  // //     if (is(child, 'ptn:PnElement')) {
-  // //       that.updateParent(child);
-  // //     }
-  // //   })
-  // // }
-  // // this.executed(['canvas.updateRoot'], updateRoot);
-  // // this.reverted(['canvas.updateRoot'], updateRoot);
-
-  // // update bounds of everything but labels
-  // function updateBounds(e) {
-  //   const shape = e.context.shape;
-  //   if (!is(shape, 'ptn:PnElement')) {
-  //     return;
-  //   }
-
-  //   that.updateBounds(shape);
-  // }
-
-  // this.executed([
-  //   'shape.move',
-  //   'shape.create',
-  //   'shape.resize'
-  // ], ifPn(function (e) {
-  //   // exclude labels since they are handled differently during shape.changed
-  //   if (e.context.shape.type === 'label') {
-  //     return;
-  //   }
-  //   updateBounds(e)
-  // }));
-
-  // this.reverted([
-  //   'shape.move',
-  //   'shape.create',
-  //   'shape.resize'
-  // ], ifPn(function (e) {
-  //   // exclude labels since they are handled differently during shape.changed
-  //   if (e.context.shape.type === 'label') {
-  //     return;
-  //   }
-  //   updateBounds(e)
-  // }));  
-
-  // // update label bounds
-  // eventBus.on('shape.changed', function (e) {
-  //   if (e.element.type === 'label') {
-  //     updateBounds({ context: { shape: e.element } });
-  //   }
-  // });
-
-  // // attach / detach connection
-  // function updateConnection(e) {
-  //   that.updateConnection(e.context)
-  // }
-
-  // this.executed([
-  //   'connection.create',
-  //   'connection.move',
-  //   'connection.delete',
-  //   'connection.reconnect'
-  // ], ifPn(updateConnection));
+  this.reverted([
+    'shape.move',
+    'shape.create',
+    'shape.delete',
+    'connection.create',
+    'connection.move',
+    'connection.delete'
+  ], ifPnElement(reverseUpdateParent));
 
 
-  // this.reverted([
-  //   'connection.create',
-  //   'connection.move',
-  //   'connection.delete',
-  //   'connection.reconnect'
-  // ], ifPn(updateConnection));
+  // Update root element of canvas
+  function updateRoot(e) {
+    const context = event.context;
+    const oldRoot = context.oldRoot;
+    const children = oldRoot.children;
 
-  // // update waypoints
-  // function updateConnectionWaypoints(e) {
-  //   that.updateConnectionWaypoints(e.context.connection);
-  // }
+    forEach(children, function (child) {
+      if (is(child, 'ptn:PtnElement')) {
+        self.updateParent(child);
+      }
+    });
+  }
 
-  // this.executed([
-  //   'connection.layout',
-  //   'connection.move',
-  //   'connection.updateWaypoints',
-  // ], ifPn(updateConnectionWaypoints));
+  this.executed(['canvas.updateRoot'], updateRoot);
+  this.reverted(['canvas.updateRoot'], updateRoot);
 
-  // this.reverted([
-  //   'connection.layout',
-  //   'connection.move',
-  //   'connection.updateWaypoints',
-  // ], ifPn(updateConnectionWaypoints));
 
-  // // update attachments
-  // function updateAttachment(e) {
-  //   that.updateAttachment(e.context);
-  // }
+  // Update bounds of everything but labels
+  function updateBounds(e) {
+    const shape = e.context.shape;
+    if (!is(shape, 'ptn:PtnElement')) {
+      return;
+    }
 
-  // this.executed(['element.updateAttachment'], ifPn(updateAttachment));
-  // this.reverted(['element.updateAttachment'], ifPn(updateAttachment));
+    self.updateBounds(shape);
+  }
 
+  this.executed([
+    'shape.move',
+    'shape.create',
+    'shape.resize'
+  ], ifPnElement(function (e) {
+    // Exclude labels since they are handled differently during shape.changed
+    if (e.context.shape.type === 'label') {
+      return;
+    }
+    updateBounds(e);
+  }));
+
+  this.reverted([
+    'shape.move',
+    'shape.create',
+    'shape.resize'
+  ], ifPnElement(function (e) {
+    // Exclude labels since they are handled differently during shape.changed
+    if (e.context.shape.type === 'label') {
+      return;
+    }
+    updateBounds(e);
+  }));
+
+  
+  // Update label bounds
+  eventBus.on('shape.changed', function (e) {
+    if (e.element.type === 'label') {
+      updateBounds({ context: { shape: e.element } });
+    }
+  });
+
+
+  // Update connections
+  function updateConnection(e) {
+    const context = e.context;
+    self.updateConnection(context);
+  }
+
+  this.executed([
+    'connection.create',
+    'connection.move',
+    'connection.delete',
+    'connection.reconnect'
+  ], ifPnElement(updateConnection));
+
+  this.reverted([
+    'connection.create',
+    'connection.move',
+    'connection.delete',
+    'connection.reconnect'
+  ], ifPnElement(updateConnection));
+
+
+  // Update waypoints
+
+  function updateConnectionWaypoints(e) {
+    self.updateConnectionWaypoints(e.context.connection);
+  }
+
+  this.executed([
+    'connection.layout',
+    'connection.move',
+    'connection.updateWaypoints'
+  ], ifPnElement(updateConnectionWaypoints));
+
+  this.reverted([
+    'connection.layout',
+    'connection.move',
+    'connection.updateWaypoints'
+  ], ifPnElement(updateConnectionWaypoints));
 }
 
 inherits(PnUpdater, CommandInterceptor);
 
-PnUpdater.$inject = ["eventBus", "connectionDocking"];
+PnUpdater.$inject = [
+  "eventBus",
+  "pnElementFactory",
+  "connectionDocking",
+  "translate"
+];
 
+PnUpdater.prototype.updateDiAndSemanticParent = function(element, oldParent) {
+  // a label's parent does not change here
+  if (element.type === 'label') {
+    return;
+  }
 
+  const parentShape = element.parent;
+  const businessObject = element.businessObject;
+  const parentBusinessObject = parentShape && parentShape.businessObject;
+  const parentDi = parentBusinessObject && parentBusinessObject.di;
 
+  this.updateSemanticParent(businessObject, parentBusinessObject);
+  this.updateDiParent(businessObject.di, parentDi);
+};
 
-// PnUpdater.prototype.updateAttachment = function (context) {
-//   const shape = context.shape;
-//   const businessObject = shape.businessObject;
-//   const host = shape.host;
+PnUpdater.prototype.updateSemanticParent = function(businessObject, newParent) {
+  let containment = businessObject.$parent;
+  const translate = this._translate;
 
-//   businessObject.attachedToRef = host && host.businessObject;
-// }
+  if (businessObject.$parent === newParent) {
+    return;
+  }
 
-// function linkToBusinessObjectParent(element) {
-//   const parentShape = element.parent;
+  if (is(businessObject, 'ptn:PtnElement')) {
+    containment = 'ptnElements'
+  }
 
-//   const businessObject = element.businessObject;
-//   const parentBusinessObject = parentShape && parentShape.businessObject;
+  if (!containment) {
+    throw new Error(translate(
+      'no parent for {element} in {parent}',
+      {
+        element: businessObject.id,
+        parent: newParent.id
+      }
+    ));
+  }
 
-//   parentBusinessObject.get('Elements').push(businessObject);
-//   businessObject.$parent = parentBusinessObject;
-// }
+  let children;
 
-// function removeFromBusinessObjectParent(element) {
-//   const businessObject = element.businessObject;
-//   const parentBusinessObject = businessObject.$parent;
+  if (businessObject.$parent) {
+    // Remove from old parent
+    children = businessObject.$parent.get(containment);
+    collectionRemove(children, businessObject);
+  }
 
-//   collectionRemove(parentBusinessObject.get('Elements'), businessObject);
-//   businessObject.$parent = undefined;
-// }
+  if (!newParent) {
+    businessObject.$parent = null;
+  } else {
+    // Add to new parent
+    children = newParent.get(containment);
+    children.push(businessObject);
 
+    businessObject.$parent = newParent;
+  }
+}
 
+PnUpdater.prototype.updateDiParent = function(di, parentDi) {
+  if (parentDi && !is(parentDi, 'ptnDi:PtnPlane')) {
+    parentDi = parentDi.$parent;
+  }
 
+  if (di.$parent === parentDi) {
+    return;
+  }
 
+  const planeElements = (parentDi || di.$parent).get('planeElement');
 
+  if (parentDi) {
+    planeElements.push(di);
+    di.$parent = parentDi;
+  } else {
+    collectionRemove(planeElements, di);
+    di.$parent = null;
+  }
+}
 
+PnUpdater.prototype.updateBounds = function (shape) {
+  const di = shape.businessObject.di;
+  const target = isLabel(shape) ? this._getLabel(di) : di;
+  let bounds = target.bounds;
 
+  if (!bounds) {
+    bounds = this._pnElementFactory.createDiBounds();
+    target.set('bounds', bounds);
+  }
 
+  assign(bounds, {
+    x: shape.x,
+    y: shape.y,
+    width: shape.width,
+    height: shape.height
+  });
+};
 
+PnUpdater.prototype.updateConnection = function (context) {
+  const connection = context.connection;
+  const businessObject = getBusinessObject(connection);
+  const newSource = getBusinessObject(connection.source);
+  const newTarget = getBusinessObject(connection.target);
 
+  if (businessObject.source !== newSource) {
+    businessObject.source = newSource;
+  }
 
+  if (businessObject.target !== newTarget) {
+    businessObject.target = newTarget;
+  }
 
+  this.updateConnectionWaypoints(connection);
+  this.updateDiConnection(businessObject.di, newSource, newTarget);
+}
+
+PnUpdater.prototype.updateConnectionWaypoints = function (connection) {
+  connection.businessObject.di.set('waypoints', this._pnElementFactory.createDiWaypoints(connection.waypoints));
+}
+
+PnUpdater.prototype.updateDiConnection = function (di, newSource, newTarget) {
+  if (di.sourceElement && di.sourceElement.ptnElement !== newSource) {
+    di.sourceElement = newSource && newSource.di;
+  }
+
+  if (di.targetElement && di.targetElement.ptnElement !== newTarget) {
+    di.targetElement = newTarget && newTarget.di;
+  }
+}
 
 PnUpdater.prototype.connectionWaypoints = function (source, target) {
   const connection = { source, target };
@@ -245,21 +318,22 @@ PnUpdater.prototype.connectionWaypoints = function (source, target) {
 }
 
 
-/**
- * Make sure the event listener is only called
- * if the touched element is a od element.
- *
- * @param  {Function} fn
- * @return {Function} guarded function
- */
-function ifPn(fn) {
+// Helpers
 
+PnUpdater.prototype._getLabel = function(di) {
+  if (!di.label) {
+    di.label = this._pnElementFactory.createDiLabel();
+  }
+
+  return di.label;
+}
+
+function ifPnElement(fn) {
   return function (event) {
-
     const context = event.context;
     const element = context.shape || context.connection;
 
-    if (is(element, 'ptn:PnElement')) {
+    if (is(element, 'ptn:PtnElement')) {
       fn(event);
     }
   };

@@ -58,23 +58,60 @@ import { importPnDiagram } from './import/Importer';
 
 
 
+const emptyDiagram = `<?xml version="1.0" encoding="UTF-8"?>
+<ptn:definitions xmlns:ptn="http://bpt-lab.org/schemas/ptn" xmlns:ptnDi="http://bpt-lab.org/schemas/ptnDi" xmlns:dc="https://www.omg.org/spec/BPMN/20100501/DC.xsd">
+    <ptn:ptNet id="ptNet_1" name="Place Transition Net 1">
+    </ptn:ptNet>
+    <ptnDi:ptnDiagram id="ptNet_1_di">
+        <ptnDi:ptnPlane id="ptNet_1_plane" ptnElement="ptNet_1">
+        </ptnDi:ptnPlane>
+    </ptnDi:ptnDiagram>
+</ptn:definitions>`;
 
-
-// TODO
-const emptyDiagram =
+const exampleDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
 <ptn:definitions xmlns:ptn="http://bpt-lab.org/schemas/ptn" xmlns:ptnDi="http://bpt-lab.org/schemas/ptnDi" xmlns:dc="https://www.omg.org/spec/BPMN/20100501/DC.xsd">
     <ptn:ptNet id="ptNet_1" name="Place Transition Net 1">
         <ptn:place id="place_1" name="place_1" marking="1"/>
+        <ptn:place id="place_2" name="place_2" marking="0"/>
+        <ptn:transition id="transition_1" name="transition_1"/>
+        <ptn:arc id="arc_1" source="place_1" target="transition_1" weight="1"/>
+        <ptn:arc id="arc_2" source="transition_1" target="place_2" weight="1"/>
     </ptn:ptNet>
     <ptnDi:ptnDiagram id="ptNet_1_di">
         <ptnDi:ptnPlane id="ptNet_1_plane" ptnElement="ptNet_1">
-        <ptnDi:ptnShape id="place_1_di" ptnElement="place_1">
-            <dc:Bounds x="100" y="100" width="50" height="50"/>
-            <ptnDi:label>
-            <dc:Bounds x="100" y="100" width="50" height="50"/>
-        </ptnDi:label>
-      </ptnDi:ptnShape>
+            <ptnDi:ptnShape id="place_1_di" ptnElement="place_1">
+                <dc:Bounds x="100" y="100" width="50" height="50"/>
+                <ptnDi:label>
+                    <dc:Bounds x="100" y="100" width="50" height="50"/>
+                </ptnDi:label>
+            </ptnDi:ptnShape>
+            <ptnDi:ptnShape id="place_2_di" ptnElement="place_2">
+                <dc:Bounds x="300" y="100" width="50" height="50"/>
+                <ptnDi:label>
+                    <dc:Bounds x="300" y="100" width="50" height="50"/>
+                </ptnDi:label>
+            </ptnDi:ptnShape>
+            <ptnDi:ptnShape id="transition_1_di" ptnElement="transition_1">
+                <dc:Bounds x="200" y="100" width="50" height="50"/>
+                <ptnDi:label>
+                    <dc:Bounds x="500" y="100" width="50" height="50"/>
+                </ptnDi:label>
+            </ptnDi:ptnShape>
+            <ptnDi:ptnEdge id="arc_1_di" ptnElement="arc_1">
+                <ptnDi:waypoint x="150" y="125"/>
+                <ptnDi:waypoint x="200" y="125"/>
+                <ptnDi:label>
+                    <dc:Bounds x="150" y="125" width="50" height="50"/>
+                </ptnDi:label>
+            </ptnDi:ptnEdge>
+            <ptnDi:ptnEdge id="arc_2_di" ptnElement="arc_2">
+                <ptnDi:waypoint x="250" y="125"/>
+                <ptnDi:waypoint x="300" y="125"/>
+                <ptnDi:label>
+                    <dc:Bounds x="250" y="125" width="50" height="50"/>
+                </ptnDi:label>
+            </ptnDi:ptnEdge>
         </ptnDi:ptnPlane>
     </ptnDi:ptnDiagram>
 </ptn:definitions>`;
@@ -236,6 +273,7 @@ PnModeler.prototype.saveXML = function (options) {
             definitions: definitions
         }) || definitions;
 
+        console.log(definitions);
         self.get('moddle').toXML(definitions, options).then(function (result) {
             let xml = result.xml;
             try {

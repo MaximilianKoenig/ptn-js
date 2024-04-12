@@ -1,4 +1,4 @@
-import { assign, map } from 'min-dash';
+import { assign, map, pick } from 'min-dash';
 import { isAny } from '../../util/Util';
 
 
@@ -31,7 +31,7 @@ PnElementFactory.prototype.createDiBounds = function(bounds) {
 	return this.create('dc:Bounds', bounds);
 }
 
-PnElementFactory.prototype.createDiLabel = function(shape) {
+PnElementFactory.prototype.createDiLabel = function() {
 	return this.create('ptnDi:PtnLabel', {
 		bounds: this.createDiBounds()
 	});
