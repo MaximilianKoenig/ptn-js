@@ -311,7 +311,7 @@ PnUpdater.prototype.updateConnection = function (context) {
 }
 
 PnUpdater.prototype.updateConnectionWaypoints = function (connection) {
-  connection.businessObject.di.set('waypoints', this._pnElementFactory.createDiWaypoints(connection.waypoints));
+  connection.businessObject.di.set('waypoint', this._pnElementFactory.createDiWaypoints(connection.waypoints));
 }
 
 PnUpdater.prototype.updateDiConnection = function (di, newSource, newTarget) {
