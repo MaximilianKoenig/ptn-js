@@ -3,9 +3,6 @@ import { getLabelAttribute, existsExternalLabel, setLabel, requiresExternalLabel
 
 export default function UpdateLabelHandler(modeling, textRenderer) {
   function setText(element, text, oldText = '') {
-    if (text == null) {
-      text = oldText;
-    }
 
     // TODO: Add an explicit warning to the user
     if (text !== null && is(element, 'ptn:Arc')) {
