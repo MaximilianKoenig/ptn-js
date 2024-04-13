@@ -1,6 +1,7 @@
 import PnElementFactory from "./PnElementFactory";
 import PnUpdater from "./PnUpdater";
 import PnLabelEditing from "./PnLabelEditing";
+import BehaviorModule from "./behavior";
 
 import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionDocking';
 import CommandModule from 'diagram-js/lib/command';
@@ -18,6 +19,7 @@ export default {
 		'pnLabelEditing'
 	],
 	__depends__: [
+		BehaviorModule,
     CommandModule,
     DirectEditingModule,
 		LabelSupportModule,
