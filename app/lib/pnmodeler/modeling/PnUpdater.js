@@ -2,7 +2,7 @@ import inherits from "inherits";
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 import { center, getBusinessObject, is } from "../../util/Util";
 import { remove as collectionRemove } from 'diagram-js/lib/util/Collections';
-import { isLabel } from "./LabelUtil";
+import { getLabel, isLabel, requiresExternalLabel } from "./LabelUtil";
 import { assign, forEach } from "min-dash";
 
 export default function PnUpdater(eventBus, pnElementFactory, connectionDocking, translate) {
@@ -126,6 +126,27 @@ export default function PnUpdater(eventBus, pnElementFactory, connectionDocking,
       updateBounds({ context: { shape: e.element } });
     }
   });
+
+  function updatePnLabel(e) {
+    const { element } = e.context;
+    const label = getLabel(element);
+    const di = element.businessObject.di;
+    const diLabel = di && di.get('label');
+
+    if (!requiresExternalLabel(element) || is(di, 'ptnDi:PtnPlane')) {
+      return;
+    }
+
+    if (label && !diLabel) {
+      di.set('label', self._pnElementFactory.createDiLabel());
+    } else if (!label && diLabel) {
+      console.log('removing label');
+      di.set('label', null);
+    }
+  }
+
+  this.executed('element.updateLabel', ifPnElement(updatePnLabel));
+  this.reverted('element.updateLabel', ifPnElement(updatePnLabel));
 
 
   // Update connections
@@ -331,7 +352,7 @@ PnUpdater.prototype._getLabel = function(di) {
 function ifPnElement(fn) {
   return function (event) {
     const context = event.context;
-    const element = context.shape || context.connection;
+    const element = context.shape || context.connection || context.element;
 
     if (is(element, 'ptn:PtnElement')) {
       fn(event);
