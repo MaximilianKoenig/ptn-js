@@ -30,7 +30,7 @@
         {
           "name": "marking",
           "isAttr": true,
-          "type": "String"
+          "type": "Integer"
         }
       ]
     },

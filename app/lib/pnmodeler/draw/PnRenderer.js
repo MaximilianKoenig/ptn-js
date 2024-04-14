@@ -78,6 +78,12 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
     // });
     // svgAppend(parentGfx, shape);
     const circle = drawCircle(parentGfx, element.width, element.height, 0, {});
+
+    const marking = element.businessObject.marking;
+    if (marking) {
+      renderMarking(parentGfx, element, marking.toString());
+    }
+
     return circle;
   };
 
@@ -234,7 +240,19 @@ export default function PnRenderer(eventBus, styles, canvas, textRenderer) {
       padding: 5,
       style: {
         fill: element.color === 'black' ? 'white' : 'black',
-        fontsize: fontSize || DEFAULT_TEXT_SIZE
+        fontSize: fontSize || DEFAULT_TEXT_SIZE
+      },
+    })
+  }
+
+  function renderMarking(parentGfx, element, marking) {
+    return renderLabel(parentGfx, marking, {
+      box: element,
+      align: 'center-middle',
+      padding: 5,
+      style: {
+        fill: 'black',
+        fontSize: 20
       },
     })
   }
