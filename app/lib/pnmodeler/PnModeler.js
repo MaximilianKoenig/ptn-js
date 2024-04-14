@@ -249,7 +249,7 @@ PnModeler.prototype.showPn = function(definitions) {
     this.clear();
 
     // We currently assume that we only import single diagrams
-    const rootDiagram = definitions.ptnDiagrams[0];
+    const rootDiagram = definitions.ptnDiagram;
     importPnDiagram(this, definitions, rootDiagram);
 }
 
