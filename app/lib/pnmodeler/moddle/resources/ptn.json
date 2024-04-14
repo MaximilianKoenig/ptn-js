@@ -95,14 +95,12 @@
           "type": "String"
         },
         {
-          "name": "ptNets",
-          "type": "PtNet",
-          "isMany": true
+          "name": "ptNet",
+          "type": "PtNet"
         },
         {
-          "name": "ptnDiagrams",
-          "type": "ptnDi:PtnDiagram",
-          "isMany": true
+          "name": "ptnDiagram",
+          "type": "ptnDi:PtnDiagram"
         },
         {
           "name": "exporter",

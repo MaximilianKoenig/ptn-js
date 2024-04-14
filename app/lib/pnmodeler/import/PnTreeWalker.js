@@ -27,9 +27,7 @@ function is(element, type) {
  * correctly specify one.
  */
 function findDisplayCandidate(definitions) {
-    return find(definitions.ptNets, function (e) {
-        return is(e, 'ptn:PtNet');
-    });
+    return definitions.ptNet;
 }
 
 
@@ -144,18 +142,6 @@ export default function PnTreeWalker(handler, translate) {
      * @throws {Error} if no diagram to display could be found
      */
     function handleDefinitions(definitions, rootPtnDiagram) {
-
-        // make sure we walk the correct ptnDiagram
-
-        var ptnDiagrams = definitions.ptnDiagrams;
-
-        if (rootPtnDiagram && ptnDiagrams.indexOf(rootPtnDiagram) === -1) {
-            throw new Error(translate('ptnDiagram not part of ptn:Definitions'));
-        }
-
-        if (!rootPtnDiagram && ptnDiagrams && ptnDiagrams.length) {
-          rootPtnDiagram = ptnDiagrams[0];
-        }
 
         // no root board -> nothing to import
         if (!rootPtnDiagram) {
