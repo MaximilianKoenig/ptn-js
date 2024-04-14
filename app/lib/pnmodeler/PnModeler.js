@@ -55,6 +55,7 @@ import PnModelingModule from './modeling';
 import PnRulesModule from './rules';
 import PnModdle from './moddle';
 import { importPnDiagram } from './import/Importer';
+import { convertModdleToPnml, convertModdleXmlToPnmlXml, convertPnmlXmlToModdleXml  } from 'pnml-moddle-converter';
 
 
 
@@ -259,6 +260,7 @@ PnModeler.prototype.saveXML = function (options) {
     const self = this;
 
     let definitions = this._definitions;
+    console.log(definitions);
 
     return new Promise(function (resolve, reject) {
 
@@ -295,6 +297,20 @@ PnModeler.prototype.saveXML = function (options) {
         });
     });
 };
+
+PnModeler.prototype.savePNML = function (options) {
+    options = options || {};
+    const moddleXml = this.saveXML(options).xml;
+    return convertModdleXmlToPnmlXml(moddleXml);
+    // const definitions = this._definitions;
+    // console.log(definitions);
+    // return convertModdleToPnml(definitions);
+}
+
+PnModeler.prototype.importPNML = function (pnmlXml) {
+    const moddleXml = convertPnmlXmlToModdleXml(pnmlXml);
+    return this.importXML(moddleXml);
+}
 
 PnModeler.prototype._emit = function (type, event) {
     return this.get('eventBus').fire(type, event);

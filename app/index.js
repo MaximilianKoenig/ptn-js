@@ -22,13 +22,17 @@ $(function() {
   createNewDiagram();
 });
 
-document.getElementById('openButton').addEventListener('click', () => upload((data) => {
-  importFromFile(data);
+document.getElementById('openXmlButton').addEventListener('click', () => upload((data) => {
+  importFromXmlFile(data);
 }));
 
-document.getElementById('saveButton').addEventListener('click', () => exportXML().then(xml => {
-  download('PetriNet.xml', xml);
+document.getElementById('openPnmlButton').addEventListener('click', () => upload((data) => {
+  importFromPnmlFile(data);
 }));
+
+document.getElementById('saveXmlButton').addEventListener('click', () => exportXML());
+
+document.getElementById('savePnmlButton').addEventListener('click', () => exportPNML());
 
 async function exportXML() {
   const pnXML = (await pnModeler.saveXML({format: true})).xml;
@@ -36,8 +40,18 @@ async function exportXML() {
   return pnXML;
 }
 
-async function importFromFile(file) {
+async function exportPNML() {
+  const pnml = (await pnModeler.savePNML({format: true})).xml;
+  console.log(pnml);
+  return pnml;
+}
+
+async function importFromXmlFile(file) {
   await pnModeler.importXML(file);
+}
+
+async function importFromPnmlFile(file) {
+  await pnModeler.importPNML(file);
 }
 
 const canvas = document.getElementById("pn-canvas")
