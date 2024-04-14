@@ -42,7 +42,6 @@ export function getFlowNodePosition(source, element) {
 }
 
 function getVerticalDistance(orientation, minDistance) {
-  console.log(orientation);
   if (orientation.indexOf('top') !== -1) {
     return -1 * minDistance;
   } else if (orientation.indexOf('bottom') !== -1) {

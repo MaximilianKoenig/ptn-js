@@ -140,7 +140,6 @@ export default function PnUpdater(eventBus, pnElementFactory, connectionDocking,
     if (label && !diLabel) {
       di.set('label', self._pnElementFactory.createDiLabel());
     } else if (!label && diLabel) {
-      console.log('removing label');
       di.set('label', null);
     }
   }
