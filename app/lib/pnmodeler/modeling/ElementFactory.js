@@ -58,7 +58,7 @@ ElementFactory.prototype.createElement = function(elementType, attrs) {
     delete attrs.di;
   }
 
-  size = this._pnElementFactory.defaultSizeForType(businessObject);
+  const size = this._pnElementFactory.defaultSizeForType(businessObject);
 
   attrs = assign({
     businessObject,
