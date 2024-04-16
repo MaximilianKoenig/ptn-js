@@ -30,19 +30,21 @@ document.getElementById('openPnmlButton').addEventListener('click', () => upload
   importFromPnmlFile(data);
 }));
 
-document.getElementById('saveXmlButton').addEventListener('click', () => exportXML());
+document.getElementById('saveXmlButton').addEventListener('click', () => exportXML().then(xml => {
+  download('PetriNet.xml', xml);
+}));
 
-document.getElementById('savePnmlButton').addEventListener('click', () => exportPNML());
+document.getElementById('savePnmlButton').addEventListener('click', () => exportPNML().then(pnml => {
+  download('PetriNet.pnml', pnml);
+}));
 
 async function exportXML() {
   const pnXML = (await pnModeler.saveXML({format: true})).xml;
-  console.log(pnXML);
   return pnXML;
 }
 
 async function exportPNML() {
-  const pnml = (await pnModeler.savePNML({format: true})).xml;
-  console.log(pnml);
+  const pnml = (await pnModeler.savePNML({format: true}));
   return pnml;
 }
 
