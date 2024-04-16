@@ -58,6 +58,37 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
     create.start(event, shape, { source: element });
   }
 
+  function addToken(event, element) {
+    const marking = element.businessObject.marking;
+    if (marking) {
+      modeling.updateProperty(
+        element,
+        'marking',
+        marking + 1,
+        { rerender: true }
+      );
+    } else {
+      modeling.updateProperty(
+        element,
+        'marking',
+        1,
+        { rerender: true }
+      );
+    }
+  }
+
+  function removeToken(event, element) {
+    const marking = element.businessObject.marking;
+    if (marking && marking > 0) {
+      modeling.updateProperty(
+        element,
+        'marking',
+        marking - 1,
+        { rerender: true }
+      );
+    }
+  }
+
   // Common actions
   const actions = {
     'delete': {
@@ -111,6 +142,26 @@ PnContextPadProvider.prototype.getContextPadEntries = function (element) {
         action: {
           click: appendTransition,
           dragstart: appendTransitionStart
+        }
+      }
+    });
+    assign(actions, {
+      'add-token': {
+        group: 'create',
+        className: 'pn-icon-add-token',
+        title: 'Add token',
+        action: {
+          click: addToken
+        }
+      }
+    });
+    assign(actions, {
+      'remove-token': {
+        group: 'create',
+        className: 'pn-icon-remove-token',
+        title: 'Remove token',
+        action: {
+          click: removeToken
         }
       }
     });

@@ -7,15 +7,9 @@
   "ascent": 850,
   "glyphs": [
     {
-      "uid": "3v2lgx3os8ub377alyqm8mn2o7r4zywg",
-      "css": "th",
-      "code": 59392,
-      "src": "modernpics"
-    },
-    {
-      "uid": "d0e66a4b2b1fe0b3a15f0829c6bad7f5",
+      "uid": "c0f1ea15318d0bce09d54358b1890c27",
       "css": "place",
-      "code": 59394,
+      "code": 59392,
       "src": "custom_icons",
       "selected": true,
       "svg": {
@@ -23,13 +17,13 @@
         "width": 1000
       },
       "search": [
-        "place"
+        "pn-place"
       ]
     },
     {
-      "uid": "cf508087c394034eb6a06a36db9b2877",
+      "uid": "0cc3e3f7c0f459a8b1dbd53b95ba6013",
       "css": "transition",
-      "code": 59393,
+      "code": 59394,
       "src": "custom_icons",
       "selected": true,
       "svg": {
@@ -37,7 +31,35 @@
         "width": 1000
       },
       "search": [
-        "transition"
+        "pn-silent-transition"
+      ]
+    },
+    {
+      "uid": "0d0efe7a1904c816c2ed50604fa2ff53",
+      "css": "add-token",
+      "code": 59397,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M731.4 48.9V146.5H633.7V268.6H731.4V366.3H853.5V268.6H951.1V146.5H853.5V48.9ZM413.2 221.9A364.9 364.9 0 0 0 48.3 586.8 364.9 364.9 0 0 0 413.2 951.7 364.9 364.9 0 0 0 778.1 586.8 364.9 364.9 0 0 0 413.2 221.9Z",
+        "width": 1000
+      },
+      "search": [
+        "pn-add-token"
+      ]
+    },
+    {
+      "uid": "7f98fb3c9580f8fe5d489ab198ccc520",
+      "css": "remove-token",
+      "code": 59398,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M633.7 146.5V268.6H951.1V146.5ZM413.2 221.9A364.9 364.9 0 0 0 48.3 586.8 364.9 364.9 0 0 0 413.2 951.7 364.9 364.9 0 0 0 778.1 586.8 364.9 364.9 0 0 0 413.2 221.9Z",
+        "width": 1000
+      },
+      "search": [
+        "pn-remove-token"
       ]
     }
   ]
