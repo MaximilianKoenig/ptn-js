@@ -185,6 +185,11 @@ PnModeler.prototype.createNew = function () {
     return this.importXML(emptyDiagram);
 }
 
+PnModeler.prototype.importPNML = async function (pnmlXml) {
+    const moddleXml = convertPnmlXmlToModdleXml(pnmlXml);
+    await this.importXML(moddleXml);
+}
+
 PnModeler.prototype.importXML = function (xml) {
     const self = this;
 
@@ -195,13 +200,11 @@ PnModeler.prototype.importXML = function (xml) {
 
         const moddle = self.get('moddle');
 
-        console.log(moddle);
         moddle.ids.clear();
 
         moddle.fromXML(xml, 'ptn:Definitions').then(function (result) {
             let definitions = result.rootElement;
             const { references, warnings, elementsById } = result;
-            console.log(result);
 
             const context = {
                 references,
@@ -260,7 +263,6 @@ PnModeler.prototype.saveXML = function (options) {
     const self = this;
 
     let definitions = this._definitions;
-    console.log(definitions);
 
     return new Promise(function (resolve, reject) {
 
@@ -275,7 +277,6 @@ PnModeler.prototype.saveXML = function (options) {
             definitions: definitions
         }) || definitions;
 
-        console.log(definitions);
         self.get('moddle').toXML(definitions, options).then(function (result) {
             let xml = result.xml;
             try {
@@ -298,18 +299,10 @@ PnModeler.prototype.saveXML = function (options) {
     });
 };
 
-PnModeler.prototype.savePNML = function (options) {
+PnModeler.prototype.savePNML = async function (options) {
     options = options || {};
-    const moddleXml = this.saveXML(options).xml;
+    const moddleXml = (await this.saveXML(options)).xml;
     return convertModdleXmlToPnmlXml(moddleXml);
-    // const definitions = this._definitions;
-    // console.log(definitions);
-    // return convertModdleToPnml(definitions);
-}
-
-PnModeler.prototype.importPNML = function (pnmlXml) {
-    const moddleXml = convertPnmlXmlToModdleXml(pnmlXml);
-    return this.importXML(moddleXml);
 }
 
 PnModeler.prototype._emit = function (type, event) {
