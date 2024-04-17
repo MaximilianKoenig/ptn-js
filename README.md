@@ -7,13 +7,13 @@ The tool is based on [diagram-js](https://github.com/bpmn-io/diagram-js) and too
 ## Usage
 
 The modeler is available as an npm package.
-If you want to embed the modeler into your project, install the package as a dependency to your node project.
+If you want to embed the modeler into your project, install the package as a dependency to your node project using:
 
 ```bash
 npm i --save pn-js
 ```
 
-To get started, create a pn-js instance, bind it to the canvas, and import a model or create a new one.
+To integrate the modeler, create a pn-js instance, bind it to the canvas, and import a model or create a new one.
 
 ```javascript
 import PnModeler from 'pn-js/lib/Modeler';
