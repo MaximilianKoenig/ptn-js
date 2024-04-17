@@ -24,8 +24,6 @@
     "README.md"
   ],
   "scripts": {
-    "dev": "parcel app/index.html",
-    "build": "parcel build app/index.html"
   },
   "dependencies": {
     "bpmn-font": "^0.12.1",
