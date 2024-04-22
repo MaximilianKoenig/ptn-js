@@ -29,8 +29,11 @@ const modeler = new PnModeler({
 });
 
 await modeler.importXML(xml);
-// Alternatively, you can create an empty diagram with:
-// await modeler.createNew();
+// await modeler.createNew(); Alternatively, this creates an empty diagram
+// await modeler.importPNML(pnml); Or you can import a .pnml file
+
+const xmlExport = (await modeler.saveXML()).xml;
+const pnmlExport = await modeler.savePNML();
 ```
 
 An example can be found [here](https://github.com/MaximilianKoenig/pn-js-demo).
