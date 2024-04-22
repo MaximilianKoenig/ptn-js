@@ -1,0 +1,16 @@
+@import "~diagram-js/assets/diagram-js.css";
+@import "~bpmn-font/dist/css/bpmn.css";
+@import url("./icons/css/pn.css");
+
+/* Overwriting diagram-js classes */
+.djs-context-pad .entry.active {
+  color: var(--popup-header-entry-selected-color);
+  border: solid 1px var(--popup-header-entry-selected-color);
+  background-color: var(--popup-header-entry-selected-background-color);
+  font-size: 20px;
+}
+
+.djs-palette .separator {
+  background-color: transparent;
+  opacity: 1; 
+}
