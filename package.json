@@ -1,6 +1,6 @@
 {
   "name": "ptn-js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Petri net modeling tool for viewing and editing Petri nets in the browser. Supports the import and export of .pnml files.",
   "repository": {
     "type": "git",
