@@ -15,6 +15,8 @@
 <glyph glyph-name="remove-token" unicode="&#xe806;" d="M634 704v-123h317v123h-317z m-221-76q-99 0-184-50-83-48-131-131-50-85-50-184t50-184q48-83 131-131 85-50 184-50t184 50q83 48 131 131 50 85 50 184t-50 184q-48 83-131 131-85 50-184 50z" horiz-adv-x="1010" />
 
 <glyph glyph-name="fire-transition" unicode="&#xe807;" d="M319-76v150l412 276-412 276v150l636-426z m-220 852h125v-852h-125v852z" horiz-adv-x="1010" />
+
+<glyph glyph-name="unfire-transition" unicode="&#xe808;" d="M691-76v150l-412 276 412 276v150l-636-426z m220 852h-125v-852h125v852z" horiz-adv-x="1020" />
 </font>
 </defs>
 </svg>

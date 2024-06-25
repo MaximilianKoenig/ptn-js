@@ -75,6 +75,20 @@
       "search": [
         "pn-transition"
       ]
+    },
+    {
+      "uid": "03968ea25999a5faccc8418af726ab46",
+      "css": "unfire-transition",
+      "code": 59400,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M691 926V776L279 500 691 224V74L55 500ZM911 74H786V926H911V74Z",
+        "width": 1020
+      },
+      "search": [
+        "pn-unfire-transition"
+      ]
     }
   ]
 }
