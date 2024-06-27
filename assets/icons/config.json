@@ -35,20 +35,6 @@
       ]
     },
     {
-      "uid": "0a8ec5b815235790382430c94b5e4748",
-      "css": "fire-transition",
-      "code": 59399,
-      "src": "custom_icons",
-      "selected": true,
-      "svg": {
-        "path": "M319 926V776L731 500 319 224V74L955 500ZM99 74H224V926H99V74Z",
-        "width": 1010
-      },
-      "search": [
-        "pn-fire-transition"
-      ]
-    },
-    {
       "uid": "b56014d219c33907678c30bb82b5b504",
       "css": "place",
       "code": 59393,
@@ -77,14 +63,28 @@
       ]
     },
     {
-      "uid": "03968ea25999a5faccc8418af726ab46",
+      "uid": "ed19bb668375fb9b1278c80891073a66",
+      "css": "fire-transition",
+      "code": 59399,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M212.7 22.1C122.6-29.7 49.5 12.7 49.5 116.6L49.5 883.3C49.5 987.3 122.6 1029.6 212.7 978L882.9 593.6C973.1 541.9 973.1 458.1 882.9 406.4ZM212.7 22.1",
+        "width": 1000
+      },
+      "search": [
+        "pn-fire-transition"
+      ]
+    },
+    {
+      "uid": "bf3dea97f03cb2e7f93b3c3c448c6e09",
       "css": "unfire-transition",
       "code": 59400,
       "src": "custom_icons",
       "selected": true,
       "svg": {
-        "path": "M691 926V776L279 500 691 224V74L55 500ZM911 74H786V926H911V74Z",
-        "width": 1020
+        "path": "M787.3 977.9C877.4 1029.7 950.5 987.3 950.5 883.4L950.5 116.7C950.5 12.7 877.4-29.6 787.3 22L117.1 406.4C26.9 458.1 26.9 541.9 117.1 593.6ZM787.3 977.9",
+        "width": 1000
       },
       "search": [
         "pn-unfire-transition"
