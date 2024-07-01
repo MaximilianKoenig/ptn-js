@@ -1,5 +1,7 @@
 
-.pn-icon-place:before { content: '\e800'; } /* '' */
+.pn-icon-place:before { content: '\e801'; } /* '' */
 .pn-icon-transition:before { content: '\e802'; } /* '' */
 .pn-icon-add-token:before { content: '\e805'; } /* '' */
 .pn-icon-remove-token:before { content: '\e806'; } /* '' */
+.pn-icon-fire-transition:before { content: '\e807'; } /* '' */
+.pn-icon-unfire-transition:before { content: '\e808'; } /* '' */
