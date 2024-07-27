@@ -12,5 +12,51 @@
 
 .djs-palette .separator {
   background-color: transparent;
-  opacity: 1; 
+  opacity: 1;
+}
+
+.ptn-toggle-mode {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: var(--token-simulation-silver-darken-94, #efefef);
+  border-radius: 2px;
+  padding: 6px;
+  font-size: 16px;
+  color: var(--token-simulation-grey-darken-30, #212121);
+  user-select: none;
+  display: inline-flex;
+}
+
+.ptn-toggle-mode .ptn-toggle {
+  margin-left: 0.25em;
+  display: inline-flex;
+}
+
+.djs-container.simulation .ptn-toggle-mode,
+.ptn-toggle-mode:hover {
+  background-color: var(--token-simulation-green-base-44, #10d070);
+  color: var(--token-simulation-white, #ffffff);
+}
+
+.djs-container.simulation .djs-bendpoint,
+.djs-container.simulation .djs-outline,
+.djs-container.simulation .djs-palette,
+.djs-container.simulation .djs-resizer,
+.djs-container.simulation .djs-segment-dragger {
+  display: none !important;
+}
+
+.djs-container.simulation
+  .djs-overlay:not(
+    .djs-overlay-bts-context-menu,
+    .djs-overlay-bts-element-notification,
+    .djs-overlay-bts-token-count
+  ) {
+  display: none !important;
+}
+
+.djs-container .djs-palette {
+  top: 60px !important;
 }
