@@ -1,12 +1,12 @@
 @font-face {
   font-family: "pn";
-  src: url("../font/pn.eot?27636900");
+  src: url("../font/pn.eot?5051076");
   src:
-    url("../font/pn.eot?27636900#iefix") format("embedded-opentype"),
-    url("../font/pn.woff2?27636900") format("woff2"),
-    url("../font/pn.woff?27636900") format("woff"),
-    url("../font/pn.ttf?27636900") format("truetype"),
-    url("../font/pn.svg?27636900#pn") format("svg");
+    url("../font/pn.eot?5051076#iefix") format("embedded-opentype"),
+    url("../font/pn.woff2?5051076") format("woff2"),
+    url("../font/pn.woff?5051076") format("woff"),
+    url("../font/pn.ttf?5051076") format("truetype"),
+    url("../font/pn.svg?5051076#pn") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'pn';
-    src: url('../font/pn.svg?27636900#pn') format('svg');
+    src: url('../font/pn.svg?5051076#pn') format('svg');
   }
 }
 */
@@ -69,3 +69,12 @@
 .pn-icon-unfire-transition:before {
   content: "\e808";
 } /* '' */
+.pn-icon-reset:before {
+  content: "\e809";
+} /* '' */
+.pn-icon-toggle-off:before {
+  content: "\e810";
+} /* '' */
+.pn-icon-toggle-on:before {
+  content: "\e811";
+} /* '' */
