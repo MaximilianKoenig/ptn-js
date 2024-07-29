@@ -60,3 +60,49 @@
 .djs-container .djs-palette {
   top: 60px !important;
 }
+
+.bts-palette {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+
+.bts-palette.hidden {
+  display: none;
+}
+
+.bts-palette .bts-entry {
+  cursor: pointer;
+  background-color: var(--token-simulation-silver-darken-94, #efefef);
+  border-radius: 2px;
+  padding: 6px 0;
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: var(--token-simulation-grey-darken-30, #212121);
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+.bts-palette .bts-entry:last-child {
+  margin-bottom: 0;
+}
+
+.bts-palette .bts-entry:not(.disabled):hover {
+  color: var(--token-simulation-white, #ffffff);
+  background-color: var(--token-simulation-green-base-44, #10d070);
+}
+
+.bts-palette .bts-entry.active {
+  color: var(--token-simulation-white, #ffffff);
+  background-color: var(--token-simulation-green-base-44, #10d070);
+}
+
+.bts-palette .bts-entry.disabled {
+  pointer-events: none;
+  color: var(--token-simulation-grey-base-40, #666666);
+}
