@@ -5,3 +5,6 @@
 .pn-icon-remove-token:before { content: '\e806'; } /* '' */
 .pn-icon-fire-transition:before { content: '\e807'; } /* '' */
 .pn-icon-unfire-transition:before { content: '\e808'; } /* '' */
+.pn-icon-reset:before { content: '\e809'; } /* '' */
+.pn-icon-toggle-off:before { content: '\e810'; } /* '' */
+.pn-icon-toggle-on:before { content: '\e811'; } /* '' */

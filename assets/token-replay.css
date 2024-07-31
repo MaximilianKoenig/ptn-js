@@ -1,0 +1,144 @@
+.canvas {
+  padding: 0px;
+}
+
+.simulation {
+  box-shadow: inset 0px 0px 0px 4px
+    var(--token-simulation-green-base-44, #10d070);
+}
+
+.ptn-toggle-mode {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: var(--token-simulation-silver-darken-94, #efefef);
+  border-radius: 2px;
+  padding: 6px;
+  font-size: 16px;
+  color: var(--token-simulation-grey-darken-30, #212121);
+  user-select: none;
+  display: inline-flex;
+}
+
+.ptn-toggle-mode .ptn-toggle {
+  margin-left: 0.25em;
+  display: inline-flex;
+}
+
+.djs-container.simulation .ptn-toggle-mode,
+.ptn-toggle-mode:hover {
+  background-color: var(--token-simulation-green-base-44, #10d070);
+  color: var(--token-simulation-white, #ffffff);
+}
+
+.djs-container.simulation .djs-bendpoint,
+.djs-container.simulation .djs-outline,
+.djs-container.simulation .djs-palette,
+.djs-container.simulation .djs-resizer,
+.djs-container.simulation .djs-segment-dragger {
+  display: none !important;
+}
+
+.djs-container.simulation
+  .djs-overlay:not(
+    .djs-overlay-bts-context-menu,
+    .djs-overlay-bts-element-notification,
+    .djs-overlay-bts-token-count
+  ) {
+  display: none !important;
+}
+
+.djs-container .djs-palette {
+  top: 60px !important;
+}
+
+.bts-palette {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+
+.bts-palette.hidden {
+  display: none;
+}
+
+.bts-palette .bts-entry {
+  cursor: pointer;
+  background-color: var(--token-simulation-silver-darken-94, #efefef);
+  border-radius: 2px;
+  padding: 6px 0;
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: var(--token-simulation-grey-darken-30, #212121);
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+.bts-palette .bts-entry:last-child {
+  margin-bottom: 0;
+}
+
+.bts-palette .bts-entry:not(.disabled):hover {
+  color: var(--token-simulation-white, #ffffff);
+  background-color: var(--token-simulation-green-base-44, #10d070);
+}
+
+.bts-palette .bts-entry.active {
+  color: var(--token-simulation-white, #ffffff);
+  background-color: var(--token-simulation-green-base-44, #10d070);
+}
+
+.bts-palette .bts-entry.disabled {
+  pointer-events: none;
+  color: var(--token-simulation-grey-base-40, #666666);
+}
+
+.bts-context-pad {
+  cursor: pointer;
+  background-color: var(--token-simulation-grey-lighten-56, #909090);
+  border-radius: 2px;
+  margin: 0;
+  font-size: 16px;
+  color: var(--token-simulation-grey-darken-30, #212121);
+  opacity: 0.5;
+  transition: all 0.1s ease-in-out;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.bts-context-pad:not(.disabled):hover {
+  background-color: var(--token-simulation-green-base-44, #10d070);
+  opacity: 1;
+  color: var(--token-simulation-white, #ffffff);
+}
+
+.djs-overlays:not(.hover) .bts-context-pad:not(:hover).show-hover,
+.bts-context-pad:not(:hover) .show-hover,
+.bts-context-pad:hover .hide-hover {
+  display: none;
+}
+
+.bts-context-pad.disabled {
+  background-color: var(--token-simulation-silver-darken-94, #efefef);
+  color: var(--token-simulation-grey-base-40, #666666);
+  pointer-events: none;
+}
+
+.bts-context-pad.hidden {
+  display: none;
+}
+
+.bts-context-pad [class^="bpmn-icon-"]:before,
+.bts-context-pad [class*=" bpmn-icon-"]:before {
+  margin: 0;
+}
