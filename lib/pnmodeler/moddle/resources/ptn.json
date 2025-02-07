@@ -24,8 +24,18 @@
       ]
     },
     {
+      "name": "PtnFlowElement",
+      "isAbstract": true,
+      "superClass": ["PtnElement"]
+    },
+    {
+      "name": "PtnFlowNode",
+      "isAbstract": true,
+      "superClass": ["PtnFlowElement"]
+    },
+    {
       "name": "Place",
-      "superClass": ["PtnElement"],
+      "superClass": ["PtnFlowNode"],
       "properties": [
         {
           "name": "marking",
@@ -36,23 +46,23 @@
     },
     {
       "name": "Transition",
-      "superClass": ["PtnElement"],
+      "superClass": ["PtnFlowNode"],
       "properties": []
     },
     {
       "name": "Arc",
-      "superClass": ["PtnElement"],
+      "superClass": ["PtnFlowElement"],
       "properties": [
         {
           "name": "source",
           "isAttr": true,
-          "type": "PtnElement",
+          "type": "PtnFlowElement",
           "isReference": true
         },
         {
           "name": "target",
           "isAttr": true,
-          "type": "PtnElement",
+          "type": "PtnFlowElement",
           "isReference": true
         },
         {
