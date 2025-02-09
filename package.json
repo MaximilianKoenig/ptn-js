@@ -40,11 +40,6 @@
     "tiny-svg": "^4.0.0"
   },
   "devDependencies": {
-    "@parcel/transformer-less": "^2.11.0",
-    "parcel": "^2.11.0",
     "prettier": "^3.2.5"
-  },
-  "@parcel/resolver-default": {
-    "packageExports": true
   }
 }
