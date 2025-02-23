@@ -7,18 +7,18 @@
   },
   "types": [
     {
-      "name": "PtnDiagram",
+      "name": "Diagram",
       "properties": [
         {
           "name": "plane",
-          "type": "PtnPlane",
-          "redefines": "Diagram#rootElement"
+          "type": "Plane",
+          "redefines": "AbstractDiagram#rootElement"
         }
       ],
-      "superClass": ["Diagram"]
+      "superClass": ["AbstractDiagram"]
     },
     {
-      "name": "Diagram",
+      "name": "AbstractDiagram",
       "isAbstract": true,
       "properties": [
         {
@@ -41,19 +41,19 @@
       ]
     },
     {
-      "name": "PtnPlane",
+      "name": "Plane",
       "properties": [
         {
-          "name": "ptnElement",
+          "name": "modelElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtnElement"
+          "type": "ptn:AbstractElement"
         }
       ],
-      "superClass": ["Plane"]
+      "superClass": ["AbstractPlane"]
     },
     {
-      "name": "Plane",
+      "name": "AbstractPlane",
       "isAbstract": true,
       "properties": [
         {
@@ -66,17 +66,17 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "PtnShape",
+      "name": "DiagramShape",
       "properties": [
         {
-          "name": "ptnElement",
+          "name": "modelElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtnElement"
+          "type": "ptn:AbstractElement"
         },
         {
           "name": "label",
-          "type": "PtnLabel"
+          "type": "DiagramLabel"
         }
       ],
       "superClass": ["LabeledShape"]
@@ -108,30 +108,30 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "PtnEdge",
+      "name": "DiagramEdge",
       "properties": [
         {
-          "name": "ptnElement",
+          "name": "modelElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtnElement"
+          "type": "ptn:AbstractElement"
         },
         {
           "name": "label",
-          "type": "PtnLabel"
+          "type": "DiagramLabel"
         },
         {
           "name": "sourceElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtnElement",
+          "type": "ptn:AbstractElement",
           "redefines": "Edge#source"
         },
         {
           "name": "targetElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:PtnElement",
+          "type": "ptn:AbstractElement",
           "redefines": "Edge#target"
         }
       ],
@@ -158,14 +158,14 @@
       "properties": [
         {
           "name": "source",
-          "type": "ptn:PtnElement",
+          "type": "ptn:AbstractElement",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
         },
         {
           "name": "target",
-          "type": "ptn:PtnElement",
+          "type": "ptn:AbstractElement",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
@@ -183,7 +183,7 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "PtnLabel",
+      "name": "DiagramLabel",
       "superClass": ["Label"]
     },
     {
@@ -209,7 +209,7 @@
         },
         {
           "name": "owningDiagram",
-          "type": "Diagram",
+          "type": "AbstractDiagram",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true

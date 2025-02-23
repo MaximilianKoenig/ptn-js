@@ -7,7 +7,7 @@
   },
   "types": [
     {
-      "name": "PtnElement",
+      "name": "AbstractElement",
       "isAbstract": true,
       "properties": [
         {
@@ -24,18 +24,18 @@
       ]
     },
     {
-      "name": "PtnFlowElement",
+      "name": "ModelElement",
       "isAbstract": true,
-      "superClass": ["PtnElement"]
+      "superClass": ["AbstractElement"]
     },
     {
-      "name": "PtnFlowNode",
+      "name": "ModelNode",
       "isAbstract": true,
-      "superClass": ["PtnFlowElement"]
+      "superClass": ["ModelElement"]
     },
     {
       "name": "Place",
-      "superClass": ["PtnFlowNode"],
+      "superClass": ["ModelNode"],
       "properties": [
         {
           "name": "marking",
@@ -47,23 +47,28 @@
     },
     {
       "name": "Transition",
-      "superClass": ["PtnFlowNode"],
+      "superClass": ["ModelNode"],
       "properties": []
     },
     {
+      "name": "ModelConnection",
+      "isAbstract": true,
+      "superClass": ["ModelElement"]
+    },
+    {
       "name": "Arc",
-      "superClass": ["PtnFlowElement"],
+      "superClass": ["ModelConnection"],
       "properties": [
         {
           "name": "source",
           "isAttr": true,
-          "type": "PtnFlowElement",
+          "type": "ModelNode",
           "isReference": true
         },
         {
           "name": "target",
           "isAttr": true,
-          "type": "PtnFlowElement",
+          "type": "ModelNode",
           "isReference": true
         },
         {
@@ -74,19 +79,19 @@
       ]
     },
     {
-      "name": "PtNet",
-      "superClass": ["PtnElement"],
+      "name": "Model",
+      "superClass": ["AbstractElement"],
       "properties": [
         {
-          "name": "ptnElements",
-          "type": "PtnElement",
+          "name": "modelElements",
+          "type": "ModelElement",
           "isMany": true
         }
       ]
     },
     {
       "name": "Definitions",
-      "superClass": ["PtnElement"],
+      "superClass": ["AbstractElement"],
       "properties": [
         {
           "name": "targetNamespace",
@@ -106,12 +111,12 @@
           "type": "String"
         },
         {
-          "name": "ptNet",
-          "type": "PtNet"
+          "name": "model",
+          "type": "Model"
         },
         {
-          "name": "ptnDiagram",
-          "type": "ptnDi:PtnDiagram"
+          "name": "diagram",
+          "type": "ptnDi:Diagram"
         },
         {
           "name": "exporter",
