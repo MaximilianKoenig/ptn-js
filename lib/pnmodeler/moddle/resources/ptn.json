@@ -7,7 +7,7 @@
   },
   "types": [
     {
-      "name": "AbstractElement",
+      "name": "Schema",
       "isAbstract": true,
       "properties": [
         {
@@ -26,16 +26,16 @@
     {
       "name": "ModelElement",
       "isAbstract": true,
-      "superClass": ["AbstractElement"]
+      "superClass": ["Schema"]
     },
     {
-      "name": "ModelNode",
+      "name": "Node",
       "isAbstract": true,
       "superClass": ["ModelElement"]
     },
     {
       "name": "Place",
-      "superClass": ["ModelNode"],
+      "superClass": ["Node"],
       "properties": [
         {
           "name": "marking",
@@ -47,30 +47,37 @@
     },
     {
       "name": "Transition",
-      "superClass": ["ModelNode"],
+      "superClass": ["Node"],
       "properties": []
     },
     {
-      "name": "ModelConnection",
+      "name": "Connection",
       "isAbstract": true,
       "superClass": ["ModelElement"]
     },
     {
-      "name": "Arc",
-      "superClass": ["ModelConnection"],
+      "name": "BinaryConnection",
+      "isAbstract": true,
+      "superClass": ["Connection"],
       "properties": [
         {
           "name": "source",
           "isAttr": true,
-          "type": "ModelNode",
+          "type": "Node",
           "isReference": true
         },
         {
           "name": "target",
           "isAttr": true,
-          "type": "ModelNode",
+          "type": "Node",
           "isReference": true
-        },
+        }
+      ]
+    },
+    {
+      "name": "Arc",
+      "superClass": ["BinaryConnection"],
+      "properties": [
         {
           "name": "weight",
           "isAttr": true,
@@ -80,7 +87,7 @@
     },
     {
       "name": "Model",
-      "superClass": ["AbstractElement"],
+      "superClass": ["Schema"],
       "properties": [
         {
           "name": "modelElements",
@@ -91,7 +98,7 @@
     },
     {
       "name": "Definitions",
-      "superClass": ["AbstractElement"],
+      "superClass": ["Schema"],
       "properties": [
         {
           "name": "targetNamespace",

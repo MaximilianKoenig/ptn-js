@@ -8,17 +8,6 @@
   "types": [
     {
       "name": "Diagram",
-      "properties": [
-        {
-          "name": "plane",
-          "type": "Plane",
-          "redefines": "AbstractDiagram#rootElement"
-        }
-      ],
-      "superClass": ["AbstractDiagram"]
-    },
-    {
-      "name": "AbstractDiagram",
       "isAbstract": true,
       "properties": [
         {
@@ -33,10 +22,34 @@
           "type": "String"
         },
         {
-          "name": "rootElement",
+          "name": "plane",
+          "type": "Plane"
+        }
+      ]
+    },
+    {
+      "name": "DiagramElement",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "id",
+          "isAttr": true,
+          "isId": true,
+          "type": "String"
+        },
+        {
+          "name": "owningDiagram",
+          "type": "Diagram",
+          "isReadOnly": true,
+          "isVirtual": true,
+          "isReference": true
+        },
+        {
+          "name": "owningElement",
           "type": "DiagramElement",
           "isReadOnly": true,
-          "isVirtual": true
+          "isVirtual": true,
+          "isReference": true
         }
       ]
     },
@@ -47,17 +60,10 @@
           "name": "modelElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:AbstractElement"
-        }
-      ],
-      "superClass": ["AbstractPlane"]
-    },
-    {
-      "name": "AbstractPlane",
-      "isAbstract": true,
-      "properties": [
+          "type": "ptn:Model"
+        },
         {
-          "name": "planeElement",
+          "name": "planeElements",
           "type": "DiagramElement",
           "subsettedProperty": "DiagramElement-ownedElement",
           "isMany": true
@@ -66,20 +72,15 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "DiagramShape",
+      "name": "Shape",
+      "isAbstract": true,
       "properties": [
         {
-          "name": "modelElement",
-          "isAttr": true,
-          "isReference": true,
-          "type": "ptn:AbstractElement"
-        },
-        {
-          "name": "label",
-          "type": "DiagramLabel"
+          "name": "bounds",
+          "type": "dc:Bounds"
         }
       ],
-      "superClass": ["LabeledShape"]
+      "superClass": ["DiagramElement"]
     },
     {
       "name": "LabeledShape",
@@ -97,60 +98,20 @@
       "superClass": ["Shape"]
     },
     {
-      "name": "Shape",
-      "isAbstract": true,
-      "properties": [
-        {
-          "name": "bounds",
-          "type": "dc:Bounds"
-        }
-      ],
-      "superClass": ["DiagramElement"]
-    },
-    {
-      "name": "DiagramEdge",
+      "name": "DiagramShape",
       "properties": [
         {
           "name": "modelElement",
           "isAttr": true,
           "isReference": true,
-          "type": "ptn:AbstractElement"
+          "type": "ptn:Node"
         },
         {
           "name": "label",
           "type": "DiagramLabel"
-        },
-        {
-          "name": "sourceElement",
-          "isAttr": true,
-          "isReference": true,
-          "type": "ptn:AbstractElement",
-          "redefines": "Edge#source"
-        },
-        {
-          "name": "targetElement",
-          "isAttr": true,
-          "isReference": true,
-          "type": "ptn:AbstractElement",
-          "redefines": "Edge#target"
         }
       ],
-      "superClass": ["LabeledEdge"]
-    },
-    {
-      "name": "LabeledEdge",
-      "isAbstract": true,
-      "properties": [
-        {
-          "name": "ownedLabel",
-          "type": "Label",
-          "isReadOnly": true,
-          "subsettedProperty": "DiagramElement-ownedElement",
-          "isMany": true,
-          "isVirtual": true
-        }
-      ],
-      "superClass": ["Edge"]
+      "superClass": ["LabeledShape"]
     },
     {
       "name": "Edge",
@@ -158,14 +119,14 @@
       "properties": [
         {
           "name": "source",
-          "type": "ptn:AbstractElement",
+          "type": "ptn:Node",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
         },
         {
           "name": "target",
-          "type": "ptn:AbstractElement",
+          "type": "ptn:Node",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
@@ -183,8 +144,49 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "DiagramLabel",
-      "superClass": ["Label"]
+      "name": "LabeledEdge",
+      "isAbstract": true,
+      "properties": [
+        {
+          "name": "ownedLabel",
+          "type": "Label",
+          "isReadOnly": true,
+          "subsettedProperty": "DiagramElement-ownedElement",
+          "isMany": true,
+          "isVirtual": true
+        }
+      ],
+      "superClass": ["Edge"]
+    },
+    {
+      "name": "DiagramEdge",
+      "properties": [
+        {
+          "name": "modelElement",
+          "isAttr": true,
+          "isReference": true,
+          "type": "ptn:Connection"
+        },
+        {
+          "name": "label",
+          "type": "DiagramLabel"
+        },
+        {
+          "name": "sourceElement",
+          "isAttr": true,
+          "isReference": true,
+          "type": "ptn:Node",
+          "redefines": "Edge#source"
+        },
+        {
+          "name": "targetElement",
+          "isAttr": true,
+          "isReference": true,
+          "type": "ptn:Node",
+          "redefines": "Edge#target"
+        }
+      ],
+      "superClass": ["LabeledEdge"]
     },
     {
       "name": "Label",
@@ -198,30 +200,8 @@
       "superClass": ["DiagramElement"]
     },
     {
-      "name": "DiagramElement",
-      "isAbstract": true,
-      "properties": [
-        {
-          "name": "id",
-          "isAttr": true,
-          "isId": true,
-          "type": "String"
-        },
-        {
-          "name": "owningDiagram",
-          "type": "AbstractDiagram",
-          "isReadOnly": true,
-          "isVirtual": true,
-          "isReference": true
-        },
-        {
-          "name": "owningElement",
-          "type": "DiagramElement",
-          "isReadOnly": true,
-          "isVirtual": true,
-          "isReference": true
-        }
-      ]
+      "name": "DiagramLabel",
+      "superClass": ["Label"]
     }
   ]
 }
