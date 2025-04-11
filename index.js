@@ -1,1 +1,1 @@
-export { default } from './lib/pnmodeler/PnModeler';
+export { default } from './lib/CustomModeler';
