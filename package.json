@@ -1,6 +1,6 @@
 {
   "name": "@bptlab/openbpt-modeler-petri-net",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Petri net modeling tool based on diagram-js for viewing and editing Petri nets in the browser. Supports the import and export of .pnml files.",
   "repository": {
     "type": "git",
