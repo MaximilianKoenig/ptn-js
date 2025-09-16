@@ -1,10 +1,13 @@
 {
-  "name": "ptn-js",
+  "name": "@bptlab/openbpt-modeler-petri-net",
   "version": "1.0.0",
-  "description": "Petri net modeling tool for viewing and editing Petri nets in the browser. Supports the import and export of .pnml files.",
+  "description": "Petri net modeling tool based on diagram-js for viewing and editing Petri nets in the browser. Supports the import and export of .pnml files.",
   "repository": {
     "type": "git",
     "url": "https://github.com/MaximilianKoenig/ptn-js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": "Maximilian König",
   "license": "MIT",
